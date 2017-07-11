@@ -23,3 +23,4 @@ function showPlayers(data){
     }
     return div+"</div>"
 }
+

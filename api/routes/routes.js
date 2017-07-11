@@ -22,11 +22,24 @@ module.exports = (app,passport) => {
     app.route('/crtTournament', isLoggedIn)
         .post(tournament.createTournament);
 
-    app.route('/tDetails/:id', isLoggedIn)
+    app.get('/tDetails/:id', isLoggedIn, (req, res)=>{
+        req.session.passport.tournament_id = req.params.id;
+        res.render('dashboard.hbs');
+    })
+
+    app.route('/playersInTour', isLoggedIn)
         .get(tournament.playersInTour)
 
-    app.route('/addPlayer')
-        .get(tournament.registerPlayer);
+    app.route('/allPlayers', isLoggedIn)
+        .get(tournament.playersInTour)
+
+    app.route('/registerPlayer', isLoggedIn)
+        .post(tournament.registerPlayer);
+    app.route('/standings', isLoggedIn)
+        .get(tournament.standings);
+
+    app.route('/tournamentStatus', isLoggedIn)
+        .get(tournament.tournamentStatus);
 }
 
 function isLoggedIn(req, res, next) {

@@ -36,6 +36,7 @@ exports.createTournament = (req, res)=>{
 
 exports.registerPlayer = (req, res)=>{
     var tournament_id = req.session.passport.tournament_id;
+    console.log(tournament_id, "Hello");
     var user_id = req.session.passport.user;
     var name = req.body.name;
     tournament.registerPlayer(name, user_id, tournament_id,function(result){
@@ -82,10 +83,15 @@ exports.playTournament = (req, res)=>{
 }
 
 exports.playersInTour = (req, res)=>{
-    req.session.passport.tournament_id = req.params.id;
-    var tournament_id = req.params.id;
-    console.log(tournament_id);
+    var tournament_id = req.session.passport.tournament_id ;
     tournament.playersInTour(tournament_id,function(result){
+        res.json(result);
+    })
+}
+
+exports.tournamentStatus = (req, res)=>{
+    var tournament_id = req.session.passport.tournament_id ;
+    tournament.tournamentStatus(tournament_id, function(result){
         res.json(result);
     })
 }
