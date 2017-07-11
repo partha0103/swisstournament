@@ -16,19 +16,14 @@ module.exports = (app,passport) => {
         failureFlash : true
     }));
 
-    app.get('/profile', isLoggedIn, (req, res)=>{
-        res.render('profile.hbs');
-    })
+    app.route('/profile', isLoggedIn)
+        .get(tournament.getTournaments);
 
-    app.route('/crtTournament/:id', isLoggedIn)
-        .get(tournament.createTournament);
+    app.route('/crtTournament', isLoggedIn)
+        .post(tournament.createTournament);
 
     app.route('/tDetails/:id', isLoggedIn)
-        .get(tournament.getTournaments)
-
-
-    app.route('/pDetails/:user_id/:tournament_id')
-        .get(tournament.playerDetails);
+        .get(tournament.playersInTour)
 
     app.route('/addPlayer')
         .get(tournament.registerPlayer);

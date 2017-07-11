@@ -25,7 +25,7 @@ module.exports = function(passport) {
 
         // find a user whose email is the same as the forms email
         // we are checking to see if the user trying to login already exists
-        connection.query(" select * from user where user_name = '"+username+"' ",function(err,rows){
+        connection.query(" select * from user where username = '"+username+"' ",function(err,rows){
             if (err)
                 return done(err);
              if (rows.length) {
@@ -39,7 +39,7 @@ module.exports = function(passport) {
                 console.log(email);
                 newUserMysql.email    = email;
                 newUserMysql.password = password; // use the generateHash function in our user model
-                var insertQuery = "INSERT INTO user ( user_name,email, password ) values ('"+ username+"','"+ email +"','"+ password +"')";
+                var insertQuery = "INSERT INTO user ( username,email, password ) values ('"+ username+"','"+ email +"','"+ password +"')";
                 connection.query(insertQuery,function(err,rows){
                 newUserMysql.id = rows.insertId;
                 req.session.passport.tournament = 2;
@@ -57,7 +57,7 @@ module.exports = function(passport) {
     },
     function(req, username, password, done) { // callback with email and password from our form
 
-         connection.query("SELECT * FROM `user` WHERE `user_name` = '" + username + "'",function(err,rows){
+         connection.query("SELECT * FROM `user` WHERE `username` = '" + username + "'",function(err,rows){
             if (err)
                 return done(err);
              if (!rows.length) {

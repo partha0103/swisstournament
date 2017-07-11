@@ -8,9 +8,11 @@ exports.countPlayers = (req, res)=>{
     })
 }
 exports.getTournaments = (req, res)=>{
-    var user_id = req.params.id;
+    var user_id = req.session.passport.user;
     tournament.getTournaments(user_id,function(result){
-        res.json(result);
+        res.render('profile.hbs',{
+            'result': result
+        });
     })
 }
 
@@ -25,8 +27,9 @@ exports.playerDetails = (req, res)=>{
 }
 
 exports.createTournament = (req, res)=>{
-    var user_id = req.params.id;
-    tournament.create_tournament(user_id, function(result){
+    var user_id = req.session.passport.user;
+    var name = req.body.name;
+    tournament.create_tournament(user_id,name, function(result){
         res.json(result);
     })
 }
@@ -75,5 +78,14 @@ exports.playTournament = (req, res)=>{
         else{
             res.json("No of players is not power of 2")
         }
+    })
+}
+
+exports.playersInTour = (req, res)=>{
+    req.session.passport.tournament_id = req.params.id;
+    var tournament_id = req.params.id;
+    console.log(tournament_id);
+    tournament.playersInTour(tournament_id,function(result){
+        res.json(result);
     })
 }

@@ -1,11 +1,30 @@
 {{>header}}
-<h3>Create Tournament</h3>
-{{>crt_tournament}}
-<div></div>
-<h2>Show tournaments</h2>
-<form method='get' action='/tournaments'>
-    <button type="submit" class="waves-effect waves-light btn">
-
-    </button>
-</form>
+    <div class="row">
+        <input type="text" class="in_tour col-md-4" name="name">
+        <button class="tournament col-md-2 btn btn-primar">Create</button>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Tournaments</h2>
+            <table class="table table-striped table-inverse">
+                <thead class="thead-inverse">
+                    <tr>
+                        <th>Name</th>
+                        <th>Status</th>
+                        <th>Winner</th>
+                    </tr>
+                </thead>
+                {{#each result}}
+                    <tr>
+                        <td><a class="tour" data-id="{{id}}">{{name}}</td></a>
+                        <td>{{status}}</td>
+                        <td>{{winner}}</td>
+                    </tr>
+                {{/each}}
+            </table>
+        </div>
+    </div>
+    <br>
+    <br>
+    <div class="t_list"></div>
 {{>footer}}
