@@ -25,7 +25,7 @@ exports.playerDetails = (req, res)=>{
 }
 
 exports.createTournament = (req, res)=>{
-    var user_id = req.session.passport.user;
+    var user_id = req.params.id;
     tournament.create_tournament(user_id, function(result){
         res.json(result);
     })

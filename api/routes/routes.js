@@ -1,5 +1,4 @@
 
-
 module.exports = (app,passport) => {
     const tournament = require('../controller/tournament.js');
 
@@ -21,11 +20,12 @@ module.exports = (app,passport) => {
         res.render('profile.hbs');
     })
 
-    app.route('/crtTournament', isLoggedIn)
-        .post(tournament.createTournament);
+    app.route('/crtTournament/:id', isLoggedIn)
+        .get(tournament.createTournament);
 
     app.route('/tDetails/:id', isLoggedIn)
-        .get(tournament.getTournaments);
+        .get(tournament.getTournaments)
+
 
     app.route('/pDetails/:user_id/:tournament_id')
         .get(tournament.playerDetails);
