@@ -95,3 +95,13 @@ exports.tournamentStatus = (req, res)=>{
         res.json(result);
     })
 }
+
+
+exports.executeRound = (req, res)=>{
+    var tournament_id = req.session.passport.tournament_id;
+    var winner = req.params.winner;
+    var round = req.body.round;
+    tournament.play(tournament_id, function(result){
+        res.json(result);
+    })
+}

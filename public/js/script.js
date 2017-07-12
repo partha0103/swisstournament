@@ -26,6 +26,14 @@ $(document).ready(function(){
         })
     }
 
+    function executeRound(){
+        // var val =
+    }
+
+    $('.mr_submit').on('click', function(){
+
+    })
+
     function tournamentStatus(){
         $.ajax({
             url:'/tournamentStatus',
@@ -80,9 +88,27 @@ $(document).ready(function(){
     });
 
 
-    $(".r_pairings").on('click', function(){
-        $('#r_modal').modal('show');
-    })
+    $("#r_modal").on('show.bs.modal', function(event){
+        event.stopPropagation();
+        $.ajax({
+            url: '/pairings',
+            success: function(pairs){
+                var result = showPairings(pairs);
+                $('.modal-body').html(result);
+            }
+        })
+    });
+
+    $("#mr_modal").on('show.bs.modal', function(event){
+        event.stopPropagation();
+        $.ajax({
+            url: '/pairings',
+            success: function(pairs){
+                var result = showReportMatch(pairs);
+                $('.modal-body').html(result);
+            }
+        })
+    });
 
     tournaments();
     standings();
@@ -104,11 +130,34 @@ function crtRoundTable(n){
     for(let i=0; i<n;i++){
         t_rows = t_rows + `<tr><td>`+(i+1)+
                 `</td><td class='r_status'>`+`Status`+
-                `</td><td><button class='r_result'>Result</button></td><td><button class='r_report'>MatchReport</button></td><td><button class='r_pairings' data-toggle="modal" data-target="#r_modal">Pairings</button></td></tr>`
+                `</td><td><button class='r_result'>Result</button></td><td><button class='r_report' data-toggle="modal" data-target="#mr_modal">Reportmatch</button></td><td><span class='r_pairings'><button data-toggle="modal" data-target="#r_modal">Pairings</button></span></td></tr>`
     }
     return t_rows
 }
 
 function isPowOf2(n){
     return (Math.log2(n)) % 1 == 0;
+}
+
+function showPairings(pairs){
+    var result = ""
+    pairs.forEach(function(pair){
+        result = result + `<h4>`
+                + pair.p1_name+ `vs`+ pair.p2_name+`</h4>`
+    });
+    return result;
+}
+
+
+function showReportMatch(pairs){
+    var result = "<form>";
+    pairs.forEach(function(pair){
+        result  = result + `<h4>`+
+                pair.p1_name+ `vs`+ pair.p2_name+`</h4>`+
+                `<select class='form-control' name='winner'>
+                    <option>`+pair.p1_name+`</option>
+                    <option>`+pair.p2_name+`</option>
+                </select>`
+    });
+    return result + "</form>";
 }
