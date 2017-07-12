@@ -120,8 +120,11 @@ $(document).ready(function(){
             success:function(data){
                 console.log();
                 for(let i=0; i<data.length;i++){
-                    console.log(`*[data-sid="`+i+`"]`, "data",data[i].r_status);
                     $(`*[data-sid="`+i+`"]`).html(data[i].r_status);
+                    if(data[i].r_statis = "ended"){
+                        $(`*[data-pid="`+i+`"]`).attr('disabled', true);
+                        $(`*[data-mrid="`+i+`"]`).attr('disabled', true);
+                    }
                 }
             }
         })
@@ -178,7 +181,7 @@ function crtRoundTable(n){
     for(let i=0; i<n;i++){
         t_rows = t_rows + `<tr><td>`+(i+1)+
                 `</td><td class='r_status' data-sid='`+i+`'>`+ `status`+
-                `</td><td><button class='r_result' data-rid="`+i+`">Result</button></td><td><button class='r_report' data-toggle="modal" data-target="#mr_modal" data-mrid="`+i+`"">Reportmatch</button></td><td><span class='r_pairings'><button data-toggle="modal" data-target="#r_modal" data-pid="`+i+`">Pairings</button></span></td></tr>`
+                `</td><td><button class='btn btn-primary r_result' data-rid="`+i+`">Result</button></td><td><button class='r_report btn btn-primary' data-toggle="modal" data-target="#mr_modal" data-mrid="`+i+`"">Reportmatch</button></td><td><span class='r_pairings'><button class="btn btn-primary" data-toggle="modal" data-target="#r_modal" data-pid="`+i+`">Pairings</button></span></td></tr>`
     }
     return t_rows
 }
