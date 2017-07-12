@@ -53,6 +53,7 @@ exports.standings = (req, res)=>{
 
 exports.pairings = (req, res)=>{
     var tournament_id = req.session.passport.tournament_id;
+    var round = req.params.round;
     tournament.swissPairings(tournament_id, function(result){
         res.json(result);
     })
@@ -99,9 +100,17 @@ exports.tournamentStatus = (req, res)=>{
 
 exports.executeRound = (req, res)=>{
     var tournament_id = req.session.passport.tournament_id;
-    var winner = req.params.winner;
-    var round = req.body.round;
-    tournament.play(tournament_id, function(result){
+    var winner = req.body.name;
+    var round = Number(req.body.round);
+    var status = req.body.status;
+    tournament.play(tournament_id,round, winner,status, function(result){
+        res.json(result);
+    })
+}
+
+exports.roundstatus = (req, res)=>{
+    var tournament_id = req.session.passport.tournament_id;
+    tournament.roundstatus(tournament_id, function(result){
         res.json(result);
     })
 }

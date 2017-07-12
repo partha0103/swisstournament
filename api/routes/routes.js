@@ -44,8 +44,13 @@ module.exports = (app,passport) => {
     app.route('/count', isLoggedIn)
         .get(tournament.countPlayers);
 
-    app.route('/pairings', isLoggedIn)
+    app.route('/pairings/:round', isLoggedIn)
         .get(tournament.pairings);
+
+    app.route('/executeRound', isLoggedIn)
+        .post(tournament.executeRound);
+    app.route('/roundstatus', isLoggedIn)
+        .get(tournament.roundstatus)
 }
 
 function isLoggedIn(req, res, next) {

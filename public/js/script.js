@@ -21,7 +21,7 @@ $(document).ready(function(){
             url: '/standings',
             success: function(standings){
                 var st_table = crtStandings(standings);
-                $('tbody').html(st_table);
+                $('.st_body').html(st_table);
             }
         })
     }
@@ -30,16 +30,42 @@ $(document).ready(function(){
         // var val =
     }
 
-    $('.mr_submit').on('click', function(){
+    function w_list(){
+        $('select').on('click', function(){
 
+        })
+    }
+
+    $('.mr_submit').on('click', function(event){
+        var data = {
+            name: [],
+            round: $('.hide').val(),
+            status: "ended"
+        };
+        $.each($('select.winner_list'), function(){
+            data.name.push($(this).val());
+        });
+        $.ajax({
+            url: '/executeRound',
+            method: "post",
+            data: data,
+            success:function(){
+                standings();
+                roundStatus();
+            }
+        })
     })
 
     function tournamentStatus(){
         $.ajax({
             url:'/tournamentStatus',
             success: function(data){
-
+                $('.t_status').html(data[0].status);
                 th_name.html(th_name.html() + data[0].name);
+                var tour_status = data[0].status;
+                if(tour_status == "started" || tour_status == "finished"){
+                    $(".addPlayer").attr('disabled', true);
+                }
             }
         })
     }
@@ -51,9 +77,10 @@ $(document).ready(function(){
                 var no_players = data;
                 if(isPowOf2(no_players)){
                     var max_rounds = Math.log2(no_players);
-                    var t_rows = crtRoundTable(max_rounds);
+                    var t_rows = crtRoundTable(max_rounds,data);
                     r_details.html(t_rows);
                     r_table.show();
+                    roundStatus();
                 }
             }
         })
@@ -87,11 +114,27 @@ $(document).ready(function(){
         count();
     });
 
+    function roundStatus(){
+        $.ajax({
+            url: '/roundstatus',
+            success:function(data){
+                console.log();
+                for(let i=0; i<data.length;i++){
+                    console.log(`*[data-sid="`+i+`"]`, "data",data[i].r_status);
+                    $(`*[data-sid="`+i+`"]`).html(data[i].r_status);
+                }
+            }
+        })
+
+    }
 
     $("#r_modal").on('show.bs.modal', function(event){
+        var a = event.relatedTarget;
+        var round = Number($(a).attr('data-pid'))+ 1;
+        roundStatus();
         event.stopPropagation();
         $.ajax({
-            url: '/pairings',
+            url: '/pairings/'+ round,
             success: function(pairs){
                 var result = showPairings(pairs);
                 $('.modal-body').html(result);
@@ -100,20 +143,25 @@ $(document).ready(function(){
     });
 
     $("#mr_modal").on('show.bs.modal', function(event){
+        var a = event.relatedTarget;
+        var round = Number($(a).attr('data-rmid'));
         event.stopPropagation();
         $.ajax({
-            url: '/pairings',
+            url: '/pairings/'+ round,
             success: function(pairs){
+                console.log(pairs);
                 var result = showReportMatch(pairs);
-                $('.modal-body').html(result);
+                result  = result + "<input class='hide' type='hidden'value='"+round+"'>"
+                $('.m_body').html(result);
             }
         })
     });
 
+
+
     tournaments();
     standings();
     tournamentStatus();
-
 })
 
 function crtStandings(standings){
@@ -129,8 +177,8 @@ function crtRoundTable(n){
     var t_rows = "<tr>";
     for(let i=0; i<n;i++){
         t_rows = t_rows + `<tr><td>`+(i+1)+
-                `</td><td class='r_status'>`+`Status`+
-                `</td><td><button class='r_result'>Result</button></td><td><button class='r_report' data-toggle="modal" data-target="#mr_modal">Reportmatch</button></td><td><span class='r_pairings'><button data-toggle="modal" data-target="#r_modal">Pairings</button></span></td></tr>`
+                `</td><td class='r_status' data-sid='`+i+`'>`+ `status`+
+                `</td><td><button class='r_result' data-rid="`+i+`">Result</button></td><td><button class='r_report' data-toggle="modal" data-target="#mr_modal" data-mrid="`+i+`"">Reportmatch</button></td><td><span class='r_pairings'><button data-toggle="modal" data-target="#r_modal" data-pid="`+i+`">Pairings</button></span></td></tr>`
     }
     return t_rows
 }
@@ -150,14 +198,14 @@ function showPairings(pairs){
 
 
 function showReportMatch(pairs){
-    var result = "<form>";
+    var result = "<h1><h1>";
     pairs.forEach(function(pair){
-        result  = result + `<h4>`+
-                pair.p1_name+ `vs`+ pair.p2_name+`</h4>`+
-                `<select class='form-control' name='winner'>
-                    <option>`+pair.p1_name+`</option>
-                    <option>`+pair.p2_name+`</option>
+        result  = result + `<h4> `+
+                pair.p1_name+ ` vs `+ pair.p2_name+` </h4> `+
+                `<select class='form-control winner_list' name='winner'>
+                    <option value='`+pair.p1_name+`'>`+pair.p1_name+`</option>
+                    <option value='`+pair.p2_name+`'>`+pair.p2_name+`</option>
                 </select>`
     });
-    return result + "</form>";
+    return result ;
 }

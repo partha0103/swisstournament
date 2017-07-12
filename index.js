@@ -11,12 +11,11 @@ var routes = require('./api/routes/routes.js');
 var session      = require('express-session');
 var handlebars = require('express-handlebars')
 .create({
-    extname       : '.hbs'
+    extname: '.hbs'
 });
 
 app.engine('.hbs', handlebars.engine);
 app.set('view engine', '.hbs');
-app.engine('.hbs', handlebars.engine);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
