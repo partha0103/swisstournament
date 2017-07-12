@@ -40,6 +40,9 @@ module.exports = (app,passport) => {
 
     app.route('/tournamentStatus', isLoggedIn)
         .get(tournament.tournamentStatus);
+
+    app.route('/count', isLoggedIn)
+        .get(tournament.countPlayers);
 }
 
 function isLoggedIn(req, res, next) {
