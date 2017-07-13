@@ -121,3 +121,12 @@ exports.updateTstatus = (req, res)=>{
         res.json(result);
     })
 }
+
+exports.getroundResult = (req, res)=>{
+    var tournament_id = req.session.passport.tournament_id;
+    var round = req.params.round;
+    console.log(round,"opp");
+    tournament.getroundResult(tournament_id, round, function(result){
+        res.json(result);
+    })
+}

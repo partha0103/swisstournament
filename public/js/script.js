@@ -53,7 +53,7 @@ $(document).ready(function(){
             success:function(){
                 $('#mr_modal').modal('hide')
                 standings();
-                roundStatus();
+                countPlayers();
                 updateTstatus();
             }
         })
@@ -64,8 +64,6 @@ $(document).ready(function(){
             url:'/updateTstatus',
             success: function(data){
                 tournamentStatus();
-                console.log("Hello");
-                console.log(data);
             }
         })
     }
@@ -84,16 +82,17 @@ $(document).ready(function(){
         })
     }
 
-    function count(){
+    function countPlayers(){
         $.ajax({
             url: '/count',
             success: function(data){
                 var no_players = data;
+                console.log(data,"Hqww");
                 if(isPowOf2(no_players)){
                     var max_rounds = Math.log2(no_players);
-                    var t_rows = crtRoundTable(max_rounds,data);
-                    r_details.html(t_rows);
-                    r_table.show();
+                    var result = crtRoundTable(max_rounds);
+                    $('.r_details').html(result);
+                    $('.r_table').show();
                     roundStatus();
                 }
             }
@@ -125,19 +124,30 @@ $(document).ready(function(){
     });
 
     status.on('click', function(){
-        count();
+        countPlayers();
     });
 
     function roundStatus(){
         $.ajax({
             url: '/roundstatus',
             success:function(data){
-                console.log();
-                for(let i=0; i<data.length;i++){
-                    $(`*[data-sid="`+i+`"]`).html(data[i].r_status);
-                    if(data[i].r_status = "ended"){
-                        $(`*[data-pid="`+i+`"]`).attr('disabled', true);
-                        $(`*[data-mrid="`+i+`"]`).attr('disabled', true);
+                var row = 0;
+                var end = 0;
+                for(let i=0; i<data.count;i++){
+                    if(data.status[i]){
+                        if(data.status[i].r_status == 'ended'){
+                            $(`*[data-sid="`+i+`"]`).html(data.status[i].r_status);
+                            $(`*[data-pid="`+i+`"]`).attr('disabled', true);
+                            $(`*[data-mrid="`+i+`"]`).attr('disabled', true);
+                        }
+                    }
+                    else if(row > 0){
+                     $(`*[data-pid="`+i+`"]`).attr('disabled', true);
+                     $(`*[data-mrid="`+i+`"]`).attr('disabled', true);
+                     row = row + 1;
+                    }
+                    else{
+                        row = row + 1;
                     }
                 }
             }
@@ -148,7 +158,6 @@ $(document).ready(function(){
     $("#r_modal").on('show.bs.modal', function(event){
         var a = event.relatedTarget;
         var round = Number($(a).attr('data-pid'))+ 1;
-        roundStatus();
         event.stopPropagation();
         $.ajax({
             url: '/pairings/'+ round,
@@ -166,7 +175,6 @@ $(document).ready(function(){
         $.ajax({
             url: '/pairings/'+ round,
             success: function(pairs){
-                console.log(pairs);
                 var result = showReportMatch(pairs);
                 result  = result + "<input class='hide' type='hidden'value='"+round+"'>"
                 $('.m_body').html(result);
@@ -174,7 +182,24 @@ $(document).ready(function(){
         })
     });
 
+    $("#p_modal").on('show.bs.modal', function(event){
+        var a = event.relatedTarget;
+        var round = Number($(a).attr('data-rid'));
+        event.stopPropagation();
+        $.ajax({
+            url: '/getroundResult/'+ round,
+            success: function(results){
+                var result = winnerTable(results);
+                $('.p_body').html(result);
+            }
+        })
+    });
+
 })
+
+
+
+
 
 function crtStandings(standings){
     var st_table = "";
@@ -189,8 +214,9 @@ function crtRoundTable(n){
     var t_rows = "<tr>";
     for(let i=0; i<n;i++){
         t_rows = t_rows + `<tr><td>`+(i+1)+
-                `</td><td class='r_status' disableddata-sid='`+i+`'>`+ `status`+
-                `</td><td><button class='btn btn-primary r_result' data-rid="`+i+`">Result</button></td><td><button class='r_report btn btn-primary' data-toggle="modal" data-target="#mr_modal" data-mrid="`+i+`"">Reportmatch</button></td><td><span class='r_pairings'><button class="btn btn-primary" data-toggle="modal" data-target="#r_modal" data-pid="`+i+`">Pairings</button></span></td></tr>`
+                `</td><td class='r_status' data-sid='`+i+`'>`+ `status`+
+                `</td><td><button class='btn btn-primary r_result' data-toggle="modal" data-target="#p_modal"
+                data-rid="`+i+`">Result</button></td><td><button class='r_report btn btn-primary' data-toggle="modal" data-target="#mr_modal" data-mrid="`+i+`"">Reportmatch</button></td><td><span class='r_pairings'><button class="btn btn-primary" data-toggle="modal" data-target="#r_modal" data-pid="`+i+`">Pairings</button></span></td></tr>`
     }
     return t_rows
 }
@@ -220,4 +246,24 @@ function showReportMatch(pairs){
                 </select>`
     });
     return result ;
+}
+
+
+function winnerTable(results){
+    var result = `<h1>Result<H1>`
+    result = result + `<table class="table table-striped table-inverse">` +
+                            `<thead>
+                                <th>Player1</th>
+                                <th>Player2</th>
+                                <th>Winner</th>
+                            </thead>
+                            <tbody>`;
+    for(let i=0; i<results.length; i++){
+        result = result + `<tr>`+
+                            `<td>`+results[i].player1_name+`</td>`+
+                            `<td>`+results[i].player2_name+`</td>`+
+                            `<td>`+results[i].winner_name+`</td>`+
+                        `</tr>`
+    }
+    return result + '</h1>';
 }
