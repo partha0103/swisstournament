@@ -5,7 +5,12 @@ $(document).ready(function(){
     var r_table = $('.r_table');
     var r_details = $('.r_details');
     var status = $('.status');
-    function tournaments() {
+
+
+    playerDetails();
+    standings();
+    tournamentStatus();
+    function playerDetails() {
         $.ajax({
             url: '/playersInTour',
             success:function(data){
@@ -24,10 +29,6 @@ $(document).ready(function(){
                 $('.st_body').html(st_table);
             }
         })
-    }
-
-    function executeRound(){
-        // var val =
     }
 
     function w_list(){
@@ -50,11 +51,24 @@ $(document).ready(function(){
             method: "post",
             data: data,
             success:function(){
+                $('#mr_modal').modal('hide')
                 standings();
                 roundStatus();
+                updateTstatus();
             }
         })
     })
+
+    function updateTstatus(){
+        $.ajax({
+            url:'/updateTstatus',
+            success: function(data){
+                tournamentStatus();
+                console.log("Hello");
+                console.log(data);
+            }
+        })
+    }
 
     function tournamentStatus(){
         $.ajax({
@@ -63,7 +77,7 @@ $(document).ready(function(){
                 $('.t_status').html(data[0].status);
                 th_name.html(th_name.html() + data[0].name);
                 var tour_status = data[0].status;
-                if(tour_status == "started" || tour_status == "finished"){
+                if(tour_status == "On progress" || tour_status == "Finished"){
                     $(".addPlayer").attr('disabled', true);
                 }
             }
@@ -160,11 +174,6 @@ $(document).ready(function(){
         })
     });
 
-
-
-    tournaments();
-    standings();
-    tournamentStatus();
 })
 
 function crtStandings(standings){
@@ -180,7 +189,7 @@ function crtRoundTable(n){
     var t_rows = "<tr>";
     for(let i=0; i<n;i++){
         t_rows = t_rows + `<tr><td>`+(i+1)+
-                `</td><td class='r_status' data-sid='`+i+`'>`+ `status`+
+                `</td><td class='r_status' disableddata-sid='`+i+`'>`+ `status`+
                 `</td><td><button class='btn btn-primary r_result' data-rid="`+i+`">Result</button></td><td><button class='r_report btn btn-primary' data-toggle="modal" data-target="#mr_modal" data-mrid="`+i+`"">Reportmatch</button></td><td><span class='r_pairings'><button class="btn btn-primary" data-toggle="modal" data-target="#r_modal" data-pid="`+i+`">Pairings</button></span></td></tr>`
     }
     return t_rows

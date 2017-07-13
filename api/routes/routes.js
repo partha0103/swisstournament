@@ -51,6 +51,8 @@ module.exports = (app,passport) => {
         .post(tournament.executeRound);
     app.route('/roundstatus', isLoggedIn)
         .get(tournament.roundstatus)
+    app.route('/updateTstatus', isLoggedIn)
+        .get(tournament.updateTstatus)
 }
 
 function isLoggedIn(req, res, next) {

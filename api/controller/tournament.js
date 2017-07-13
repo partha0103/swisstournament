@@ -114,3 +114,10 @@ exports.roundstatus = (req, res)=>{
         res.json(result);
     })
 }
+
+exports.updateTstatus = (req, res)=>{
+    var tournament_id = req.session.passport.tournament_id;
+    tournament.updateTstatus(tournament_id, function(result){
+        res.json(result);
+    })
+}
