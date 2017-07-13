@@ -121,7 +121,7 @@ $(document).ready(function(){
                 console.log();
                 for(let i=0; i<data.length;i++){
                     $(`*[data-sid="`+i+`"]`).html(data[i].r_status);
-                    if(data[i].r_statis = "ended"){
+                    if(data[i].r_status = "ended"){
                         $(`*[data-pid="`+i+`"]`).attr('disabled', true);
                         $(`*[data-mrid="`+i+`"]`).attr('disabled', true);
                     }
