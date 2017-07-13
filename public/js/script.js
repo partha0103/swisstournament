@@ -60,6 +60,7 @@ $(document).ready(function(){
         $.ajax({
             url:'/tournamentStatus',
             success: function(data){
+                console.log(data);
                 $('.t_status').html(data[0].status);
                 th_name.html(th_name.html() + data[0].name);
                 var tour_status = data[0].status;
@@ -118,12 +119,21 @@ $(document).ready(function(){
         $.ajax({
             url: '/roundstatus',
             success:function(data){
-                console.log();
+                var count = 0;
                 for(let i=0; i<data.length;i++){
-                    $(`*[data-sid="`+i+`"]`).html(data[i].r_status);
                     if(data[i].r_status = "ended"){
+                        $(`*[data-sid="`+i+`"]`).html(data[i].r_status);
                         $(`*[data-pid="`+i+`"]`).attr('disabled', true);
                         $(`*[data-mrid="`+i+`"]`).attr('disabled', true);
+                    }
+                    else{
+                        console.log(count);
+                        $(`*[data-sid="`+i+`"]`).html('Not started');
+                        if(count > 0){
+                            $(`*[data-pid="`+i+`"]`).attr('disabled', true);
+                            $(`*[data-mrid="`+i+`"]`).attr('disabled', true);
+                        }
+                        count++;
                     }
                 }
             }
@@ -180,7 +190,7 @@ function crtRoundTable(n){
     var t_rows = "<tr>";
     for(let i=0; i<n;i++){
         t_rows = t_rows + `<tr><td>`+(i+1)+
-                `</td><td class='r_status' data-sid='`+i+`'>`+ `status`+
+                `</td><td class='r_status' data-sid='`+i+`'>`+ `Not started`+
                 `</td><td><button class='btn btn-primary r_result' data-rid="`+i+`">Result</button></td><td><button class='r_report btn btn-primary' data-toggle="modal" data-target="#mr_modal" data-mrid="`+i+`"">Reportmatch</button></td><td><span class='r_pairings'><button class="btn btn-primary" data-toggle="modal" data-target="#r_modal" data-pid="`+i+`">Pairings</button></span></td></tr>`
     }
     return t_rows
@@ -193,8 +203,8 @@ function isPowOf2(n){
 function showPairings(pairs){
     var result = ""
     pairs.forEach(function(pair){
-        result = result + `<h4>`
-                + pair.p1_name+ `vs`+ pair.p2_name+`</h4>`
+        result = result + `<h3>`
+                + pair.player1+ ` vs `+ pair.player2+`</h3>`
     });
     return result;
 }
@@ -204,10 +214,10 @@ function showReportMatch(pairs){
     var result = "<h1><h1>";
     pairs.forEach(function(pair){
         result  = result + `<h4> `+
-                pair.p1_name+ ` vs `+ pair.p2_name+` </h4> `+
+                pair.player1+ ` vs `+ pair.player2+` </h4> `+
                 `<select class='form-control winner_list' name='winner'>
-                    <option value='`+pair.p1_name+`'>`+pair.p1_name+`</option>
-                    <option value='`+pair.p2_name+`'>`+pair.p2_name+`</option>
+                    <option value='`+pair.player1+`'>`+pair.player1+`</option>
+                    <option value='`+pair.player2+`'>`+pair.player2+`</option>
                 </select>`
     });
     return result ;
