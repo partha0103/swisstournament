@@ -36,7 +36,6 @@ exports.createTournament = (req, res)=>{
 
 exports.registerPlayer = (req, res)=>{
     var tournament_id = req.session.passport.tournament_id;
-    console.log(tournament_id, "Hello");
     var user_id = req.session.passport.user;
     var name = req.body.name;
     tournament.registerPlayer(name, user_id, tournament_id,function(result){

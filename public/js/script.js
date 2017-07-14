@@ -229,6 +229,24 @@ $(document).ready(function(){
         })
     });
 
+    $(".add_e").on('click', function(){
+        var data = {
+            name: ""
+        }
+        data.name = $('input[name=add_ex]:checked', '#e_form').val();
+        $.ajax({
+            method: 'post',
+            data: data,
+            url: '/registerPlayer',
+            success: function(result){
+                playerDetails();
+                standings();
+                $('.add_existing').html();
+                $('#adde_modal').modal('hide');
+            }
+        })
+    })
+
 })
 
 

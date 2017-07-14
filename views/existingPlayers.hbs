@@ -1,7 +1,12 @@
 <div>
+    <form id="e_form">
     {{#each players}}
-        <h4>
-            {{name}}
-        </h4>
+    <div class="radio">
+        <label>
+        <input type="radio" name="add_ex" id="radio_buttons" value="{{name}}">
+        {{name}}
+        </label>
+    </div>
     {{/each}}
+    </form>>
 </div>
