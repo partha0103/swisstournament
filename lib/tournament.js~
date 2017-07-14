@@ -464,6 +464,7 @@ function getroundResult(tournament_id,round, cb){
 }
 
 function getTstatus(tournament_id, cb){
+    console.log(tournament_id);
     var stmt = "select * from tournaments where id = ?";
     var connection = get_connection();
     connection.query(stmt,tournament_id,function(error, results){
@@ -472,22 +473,6 @@ function getTstatus(tournament_id, cb){
             throw error;
         }
         cb(results);
-    });
-}
-
-function winner(tournament_id, cb){
-    var stmt = "select winner from tournaments where id = ?";
-    var connection = get_connection();
-    connection.query(stmt,tournament_id,function(error, results){
-        connection.end();
-        if(error){
-            throw error;
-        }
-        else if(results[0].winner == "Tournament yet to be finished")
-            cb("Tournament yet to be finished");
-        else{
-            cb(results[0].winner);
-        }
     });
 }
 
@@ -511,6 +496,5 @@ module.exports = {
     play: play,
     updateTstatus: updateTstatus,
     roundstatus: roundstatus,
-    getroundResult: getroundResult,
-    winner: winner
+    getroundResult: getroundResult
 }

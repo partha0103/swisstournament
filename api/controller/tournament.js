@@ -130,3 +130,10 @@ exports.getroundResult = (req, res)=>{
         res.json(result);
     })
 }
+
+exports.winner = (req, res)=>{
+    var tournament_id = req.session.passport.tournament_id;
+    tournament.winner(tournament_id, function(result){
+        res.json(result);
+    })
+}

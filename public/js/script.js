@@ -203,6 +203,16 @@ $(document).ready(function(){
         })
     });
 
+    $("#w_modal").on('show.bs.modal', function(event){
+        event.stopPropagation();
+        $.ajax({
+            url: '/winner',
+            success: function(winner){
+                $('.w_header').html(winner);
+            }
+        })
+    });
+
 })
 
 
@@ -227,8 +237,7 @@ function crtRoundTable(n){
         t_rows = t_rows + `<tr><td>`+(i+1)+
                 `</td><td class='r_status' data-sid='`+i+`'>`+ `Not started`+
                 `</td><td><button class='btn btn-primary r_result' data-toggle="modal" data-target="#p_modal"
-                 data-rid="`+i+` ">Result</button></td><td><button class='r_report btn btn-primary' data-toggle="modal" data-target="#mr_modal" data-mrid="`+i+`"">Reportmatch</button></td>
-                <td><span class='r_pairings'><button class="btn btn-primary" data-toggle="modal" data-target="#r_modal" data-pid="`+i+`">Pairings</button></span></td></tr>`
+                 data-rid="`+i+` ">Result</button></td><td><button class='r_report btn btn-primary' data-toggle="modal" data-target="#mr_modal" data-mrid="`+i+`"">Reportmatch</button></td>`
     }
     return t_rows
 }

@@ -59,6 +59,9 @@ module.exports = (app,passport) => {
     app.route('/getroundResult/:round', isLoggedIn)
         .get(tournament.getroundResult)
 
+    app.route('/winner', isLoggedIn)
+        .get(tournament.winner)
+
     app.get('/logout', function(req, res) {
         req.logout();
         res.redirect('/');

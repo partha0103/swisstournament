@@ -12,8 +12,10 @@
             <div class="col-md-6">
                 <div class="row">
                     <button class="btn btn-primary status col-md-6">Start</button>
-                    <h2 class="col-md-6 t_status"></h2>
+                    <h3 class="col-md-6 t_status"></h3>
                     <a class="btn btn-primary logout" href="/logout">Logout</a>
+                    <button class="btn btn-success col-md-6"  data-toggle="modal" data-target="#w_modal">Winner
+                    </button>
                 </div>
             </div>
         </div>
@@ -21,9 +23,6 @@
     </div>
 </nav>
 
-<!-- <div class="alert alert-warning" role="alert" hidden>
-  <strong>Warning!</strong> No of players is not power of 2
-</div> -->
 
 <div class="row">
     <div class="col-md-6 players">
@@ -62,7 +61,6 @@
                 <th>Status</th>
                 <th>Result</th>
                 <th>Play</th>
-                <th>Pairings</th>
             </thead>
             <tbody class='r_details'>
             </tbody>
@@ -71,6 +69,7 @@
 </div>
 {{>pairings}}
 {{>matchreport}}
+{{>winner}}
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js">
 </script>
 <script type="text/javascript" src="/js/script.js"></script>
