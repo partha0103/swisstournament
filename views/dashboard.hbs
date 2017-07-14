@@ -1,5 +1,6 @@
 {{>header}}
-<div class="row">
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
     <div class="col-md-6">
         <h1 class="th_name">Tournament Name: </h1>
     </div>
@@ -10,13 +11,19 @@
             </div>
             <div class="col-md-6">
                 <div class="row">
-                    <button class="btn btn-primary status col-md-4">Start</button>
+                    <button class="btn btn-primary status col-md-6">Start</button>
                     <h2 class="col-md-6 t_status"></h2>
+                    <a class="btn btn-primary logout" href="/logout">Logout</a>
                 </div>
             </div>
         </div>
     </div>
-</div>
+    </div>
+</nav>
+
+<!-- <div class="alert alert-warning" role="alert" hidden>
+  <strong>Warning!</strong> No of players is not power of 2
+</div> -->
 
 <div class="row">
     <div class="col-md-6 players">
@@ -25,7 +32,9 @@
             <button type="submit" class="btn btn-primary status col-md-4 addPlayer">Add Player</button>
         </div>
         <h3>Players</h3>
+        <div class="player_name">
 
+        </div>
     </div>
     <div class="col-md-6">
         <table class="table table-striped table-inverse st_table">

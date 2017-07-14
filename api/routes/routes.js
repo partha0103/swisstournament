@@ -58,6 +58,11 @@ module.exports = (app,passport) => {
 
     app.route('/getroundResult/:round', isLoggedIn)
         .get(tournament.getroundResult)
+
+    app.get('/logout', function(req, res) {
+        req.logout();
+        res.redirect('/');
+    });
 }
 
 function isLoggedIn(req, res, next) {

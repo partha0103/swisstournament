@@ -7,10 +7,12 @@ var bodyParser   = require('body-parser');
 // expose this function to our app using module.exports
 module.exports = function(passport) {
     passport.serializeUser(function(user, done) {
+        console.log('inside serialize');
         done(null, user.id);
     });
 
     passport.deserializeUser(function(id, done) {
+        console.log('inside des');
         connection.query("select * from user where id = "+id,function(err,rows){
             done(err, rows[0]);
         });

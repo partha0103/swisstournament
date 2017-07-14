@@ -2,6 +2,7 @@ $(document).ready(function(){
     var table = $('table')
     $('.tournament').on('click',function(event){
         var val = $(".in_tour").val();
+        $(".in_tour").val("");
         var data = {
             name: val
         }
@@ -10,7 +11,7 @@ $(document).ready(function(){
             url: '/crtTournament',
             data: data,
             success: function(data){
-                $('tbody').append("<tr><td><a class='tour' href='/tdetails/"+data.insertId+"'>"+val+"</a></td><td>Yet to start</td><td>Yet to be declared</td></tr>")
+                $('tbody').append("<tr><td><a class='tour' href='/tdetails/"+data.insertId+"'>"+val+"</a></td><td>Tournament yet to be finished</td><td>Yet to be declared</td></tr>")
             }
         })
     });

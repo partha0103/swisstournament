@@ -16,7 +16,7 @@ $(document).ready(function(){
             success:function(data){
                 r_table.hide();
                 var result = addNames(data);
-                players.append(result);
+                $('.player_name').html(result);
             }
         })
     }
@@ -28,12 +28,6 @@ $(document).ready(function(){
                 var st_table = crtStandings(standings);
                 $('.st_body').html(st_table);
             }
-        })
-    }
-
-    function w_list(){
-        $('select').on('click', function(){
-
         })
     }
 
@@ -64,6 +58,7 @@ $(document).ready(function(){
             url:'/updateTstatus',
             success: function(data){
                 tournamentStatus();
+                console.log(data);
             }
         })
     }
@@ -73,10 +68,19 @@ $(document).ready(function(){
             url:'/tournamentStatus',
             success: function(data){
                 $('.t_status').html(data[0].status);
-                th_name.html(th_name.html() + data[0].name);
+                th_name.html("Tournament Name: "+ data[0].name);
                 var tour_status = data[0].status;
-                if(tour_status == "On progress" || tour_status == "Finished"){
+                if(tour_status == "On progress"){
                     $(".addPlayer").attr('disabled', true);
+                    addPlayer.html("Add Player");
+                    $(".status").html("Resume");
+                }
+                else if(tour_status == "Finished"){
+                    $(".status").html("Round Table");
+                    addPlayer.html("Add Player");
+                    $(".status").removeClass("btn btn-primary status col-md-6").addClass("btn btn-success winner col-md-6");
+                    $(".addPlayer").attr('disabled', true);
+                    addPlayer.addClass("btn btn-primary col-md-6");
                 }
             }
         })
@@ -87,13 +91,14 @@ $(document).ready(function(){
             url: '/count',
             success: function(data){
                 var no_players = data;
-                console.log(data,"Hqww");
                 if(isPowOf2(no_players)){
                     var max_rounds = Math.log2(no_players);
                     var result = crtRoundTable(max_rounds);
                     $('.r_details').html(result);
-                    $('.r_table').show();
+                    r_table.show();
                     roundStatus();
+                }
+                else{
                 }
             }
         })
@@ -109,6 +114,7 @@ $(document).ready(function(){
 
     addPlayer.on('click', function(){
         var name = $('.p_input').val();
+        $('.p_input').val("");
         var data = {
             'name': name
         }
@@ -117,7 +123,7 @@ $(document).ready(function(){
             data: data,
             url: '/registerPlayer',
             success: function(data){
-                players.append(name);
+                playerDetails();
                 standings();
             }
         })
@@ -132,7 +138,6 @@ $(document).ready(function(){
             url: '/roundstatus',
             success:function(data){
                 var row = 0;
-                var end = 0;
                 for(let i=0; i<data.count;i++){
                     if(data.status[i]){
                         if(data.status[i].r_status == 'ended'){
@@ -142,12 +147,15 @@ $(document).ready(function(){
                         }
                     }
                     else if(row > 0){
-                     $(`*[data-pid="`+i+`"]`).attr('disabled', true);
-                     $(`*[data-mrid="`+i+`"]`).attr('disabled', true);
-                     row = row + 1;
-                    }
-                    else{
+                        $(`*[data-rid="`+i+`"]`).attr('disabled', true);
+                        $(`*[data-pid="`+i+`"]`).attr('disabled', true);
+                        $(`*[data-mrid="`+i+`"]`).attr('disabled', true);
                         row = row + 1;
+                    }
+                    else if(row == 0){
+                        console.log("hello");
+                        row = row + 1;
+                        $(`*[data-rid="`+i+`"]`).prop('disabled', true);
                     }
                 }
             }
@@ -204,7 +212,10 @@ $(document).ready(function(){
 function crtStandings(standings){
     var st_table = "";
     for(var i=0; i<standings.length; i++){
-        st_table = st_table + `<tr><td>`+standings[i].name+`</td><td>`+standings[i].no_matches+`</td><td>`+standings[i].wins+`</td><td>`+standings[i].losses+`</td><td>`+standings[i].no_matches+`</td></tr>`;
+        st_table = st_table + `<tr><td>`+ standings[i].name +
+                    `</td><td>`+standings[i].no_matches+`</td><td>` +
+                    standings[i].wins+`</td><td>`+(standings[i].no_matches - standings[i].wins)+
+                    `</td><td>`+standings[i].no_matches+`</td></tr>`;
     }
     return st_table;
 }
@@ -214,9 +225,10 @@ function crtRoundTable(n){
     var t_rows = "<tr>";
     for(let i=0; i<n;i++){
         t_rows = t_rows + `<tr><td>`+(i+1)+
-                `</td><td class='r_status' data-sid='`+i+`'>`+ `status`+
+                `</td><td class='r_status' data-sid='`+i+`'>`+ `Not started`+
                 `</td><td><button class='btn btn-primary r_result' data-toggle="modal" data-target="#p_modal"
-                data-rid="`+i+`">Result</button></td><td><button class='r_report btn btn-primary' data-toggle="modal" data-target="#mr_modal" data-mrid="`+i+`"">Reportmatch</button></td><td><span class='r_pairings'><button class="btn btn-primary" data-toggle="modal" data-target="#r_modal" data-pid="`+i+`">Pairings</button></span></td></tr>`
+                 data-rid="`+i+` ">Result</button></td><td><button class='r_report btn btn-primary' data-toggle="modal" data-target="#mr_modal" data-mrid="`+i+`"">Reportmatch</button></td>
+                <td><span class='r_pairings'><button class="btn btn-primary" data-toggle="modal" data-target="#r_modal" data-pid="`+i+`">Pairings</button></span></td></tr>`
     }
     return t_rows
 }
@@ -267,3 +279,4 @@ function winnerTable(results){
     }
     return result + '</h1>';
 }
+
