@@ -34,7 +34,7 @@ app.use(morgan('dev'));
 app.use(session({
     store: new fileStore(file),
     secret: 'parthasarathi',
-    resave: true,
+    resave: false,
     saveUninitialized: false
 }));
 app.use(passport.initialize());

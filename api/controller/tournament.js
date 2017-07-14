@@ -137,3 +137,13 @@ exports.winner = (req, res)=>{
         res.json(result);
     })
 }
+
+exports.addExisting = (req, res)=>{
+    var tournament_id = req.session.passport.tournament_id;
+    var user_id = req.session.passport.user;
+    tournament.addExistingPlayers(user_id, tournament_id, function(results){
+        res.render('existingPlayers.hbs',{
+            players: results
+        });
+    })
+}

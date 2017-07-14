@@ -74,6 +74,8 @@ $(document).ready(function(){
                     $(".addPlayer").attr('disabled', true);
                     addPlayer.html("Add Player");
                     $(".status").html("Resume");
+                    $('.add_exist').html("Add Existing");
+                    $(".add_exist").attr('disabled', true);
                 }
                 else if(tour_status == "Finished"){
                     $(".status").html("Round Table");
@@ -81,6 +83,9 @@ $(document).ready(function(){
                     $(".status").removeClass("btn btn-primary status col-md-6").addClass("btn btn-success winner col-md-6");
                     $(".addPlayer").attr('disabled', true);
                     addPlayer.addClass("btn btn-primary col-md-6");
+                    $('.add_exist').html("Add Existing");
+                    addPlayer.html("Add Player");
+                    $(".add_exist").attr('disabled', true);
                 }
             }
         })
@@ -103,6 +108,7 @@ $(document).ready(function(){
             }
         })
     }
+
 
     function addNames(data) {
         var names = "";
@@ -209,6 +215,16 @@ $(document).ready(function(){
             url: '/winner',
             success: function(winner){
                 $('.w_header').html(winner);
+            }
+        })
+    });
+
+    $("#adde_modal").on('show.bs.modal', function(event){
+        event.stopPropagation();
+        $.ajax({
+            url: '/addExisting',
+            success: function(list){
+                $('.add_existing').html(list);
             }
         })
     });

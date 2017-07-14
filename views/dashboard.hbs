@@ -29,6 +29,7 @@
         <div class="row">
             <input type="text" name="players" class="col-md-6 p_input">
             <button type="submit" class="btn btn-primary status col-md-4 addPlayer">Add Player</button>
+            <button type="submit" class="btn btn-primary status col-md-4 add_exist"  data-toggle="modal" data-target="#adde_modal">Add Existing Player</button>
         </div>
         <h3>Players</h3>
         <div class="player_name">
@@ -70,6 +71,7 @@
 {{>pairings}}
 {{>matchreport}}
 {{>winner}}
+{{>addExisting}}
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js">
 </script>
 <script type="text/javascript" src="/js/script.js"></script>

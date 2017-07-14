@@ -25,8 +25,6 @@ module.exports = function(passport) {
     },
     function(req, username, password, done) {
 
-        // find a user whose email is the same as the forms email
-        // we are checking to see if the user trying to login already exists
         connection.query(" select * from user where username = '"+username+"' ",function(err,rows){
             if (err)
                 return done(err);
@@ -34,8 +32,6 @@ module.exports = function(passport) {
                 return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
             } else {
 
-                // if there is no user with that email
-                // create the user
                 var newUserMysql = new Object();
                 var email = req.body.email;
                 console.log(email);
