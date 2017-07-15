@@ -35,16 +35,17 @@ exports.createTournament = (req, res)=>{
 }
 
 exports.registerPlayer = (req, res)=>{
-    var tournament_id = req.session.passport.tournament_id;
+    var tournament_id = req.session.tournament_id;
     var user_id = req.session.passport.user;
     var name = req.body.name;
-    tournament.registerPlayer(name, user_id, tournament_id,function(result){
+    tournament.registerPlayer(user_id, tournament_id,name,function(result){
+        console.log(result, "result of insertion");
         res.json(result);
     })
 }
 
 exports.standings = (req, res)=>{
-    var tournament_id = req.session.passport.tournament_id;
+    var tournament_id = req.session.tournament_id;
     tournament.currentStandings(tournament_id, function(result){
         res.render('standings.hbs', {
             'standings':result
@@ -53,7 +54,7 @@ exports.standings = (req, res)=>{
 }
 
 exports.pairings = (req, res)=>{
-    var tournament_id = req.session.passport.tournament_id;
+    var tournament_id = req.session.tournament_id;
     var round = req.params.round;
     tournament.swissPairings(tournament_id, function(result){
         res.render('reportmatch.hbs',{
@@ -63,7 +64,7 @@ exports.pairings = (req, res)=>{
 }
 
 exports.startTournament = (req,res)=>{
-    var tournament_id = req.session.passport.tournament_id;
+    var tournament_id = req.session.tournament_id;
     tournament.startTournament(tournament_id,function(flag){
         if(flag){
             res.json(true);
@@ -75,7 +76,7 @@ exports.startTournament = (req,res)=>{
 }
 
 exports.playTournament = (req, res)=>{
-    var tournament_id = req.session.passport.tournament_id;
+    var tournament_id = req.session.tournament_id;
     tournament.playTournament(tournament_id, function(result){
         if(result){
             res.json(result);
@@ -87,7 +88,7 @@ exports.playTournament = (req, res)=>{
 }
 
 exports.playersInTour = (req, res)=>{
-    var tournament_id = req.session.passport.tournament_id ;
+    var tournament_id = req.session.tournament_id ;
     tournament.playersInTour(tournament_id,function(result){
         res.render('playersinTour.hbs',{
             'players': result
@@ -96,7 +97,7 @@ exports.playersInTour = (req, res)=>{
 }
 
 exports.tournamentStatus = (req, res)=>{
-    var tournament_id = req.session.passport.tournament_id ;
+    var tournament_id = req.session.tournament_id ;
     tournament.tournamentStatus(tournament_id, function(result){
         res.json(result);
     })
@@ -104,7 +105,7 @@ exports.tournamentStatus = (req, res)=>{
 
 
 exports.executeRound = (req, res)=>{
-    var tournament_id = req.session.passport.tournament_id;
+    var tournament_id = req.session.tournament_id;
     var winner = req.body.name;
     var round = Number(req.body.round);
     var status = req.body.status;
@@ -114,21 +115,21 @@ exports.executeRound = (req, res)=>{
 }
 
 exports.roundstatus = (req, res)=>{
-    var tournament_id = req.session.passport.tournament_id;
+    var tournament_id = req.session.tournament_id;
     tournament.roundstatus(tournament_id, function(result){
         res.json(result);
     })
 }
 
 exports.updateTstatus = (req, res)=>{
-    var tournament_id = req.session.passport.tournament_id;
+    var tournament_id = req.session.tournament_id;
     tournament.updateTstatus(tournament_id, function(result){
         res.json(result);
     })
 }
 
 exports.getroundResult = (req, res)=>{
-    var tournament_id = req.session.passport.tournament_id;
+    var tournament_id = req.session.tournament_id;
     var round = req.params.round;
     console.log(round,"opp");
     tournament.getroundResult(tournament_id, round, function(result){
@@ -137,14 +138,14 @@ exports.getroundResult = (req, res)=>{
 }
 
 exports.winner = (req, res)=>{
-    var tournament_id = req.session.passport.tournament_id;
+    var tournament_id = req.session.tournament_id;
     tournament.winner(tournament_id, function(result){
         res.json(result);
     })
 }
 
 exports.addExisting = (req, res)=>{
-    var tournament_id = req.session.passport.tournament_id;
+    var tournament_id = req.session.tournament_id;
     var user_id = req.session.passport.user;
     tournament.addExistingPlayers(user_id, tournament_id, function(results){
         res.render('existingPlayers.hbs',{

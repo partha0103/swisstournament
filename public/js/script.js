@@ -5,11 +5,6 @@ $(document).ready(function(){
     var r_table = $('.r_table');
     var r_details = $('.r_details');
     var status = $('.status');
-
-
-    playerDetails();
-    standings();
-    tournamentStatus();
     function playerDetails() {
         $.ajax({
             url: '/playersInTour',
@@ -239,6 +234,9 @@ $(document).ready(function(){
         })
     })
 
+    tournamentStatus();
+    playerDetails();
+    standings();
 })
 
 function crtRoundTable(n){

@@ -12,7 +12,6 @@ module.exports = function(passport) {
     });
 
     passport.deserializeUser(function(id, done) {
-        console.log('inside des');
         connection.query("select * from user where id = "+id,function(err,rows){
             done(err, rows[0]);
         });

@@ -33,7 +33,7 @@ module.exports = (app,passport) => {
         .post(tournament.createTournament);
 
     app.get('/tDetails/:id', isLoggedIn, (req, res)=>{
-        req.session.passport.tournament_id = req.params.id;
+        req.session.tournament_id = req.params.id;
         res.render('dashboard.hbs');
     })
 
