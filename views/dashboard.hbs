@@ -1,81 +1,84 @@
-{{>header}}
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-    <div class="col-md-6">
-        <h1 class="th_name">Tournament Name: </h1>
-    </div>
-    <div class="col-md-6">
-        <div class="row">
-            <div class="col-md-6">
-                <h3></h3>
+<!DOCTYPE html>
+    <html>
+        <head>
+            <title>Tournament Page</title>
+            <link rel="stylesheet" type="text/css"
+                href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        </head>
+        <body>
+        <nav class="navbar navbar-default navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <button type="button" class="btn btn-default navbar-btn">Home</button>
+                        </li>
+                        <li>
+                            <button class="btn btn-primary status navbar-btn">Start</button>
+                        </li>
+                        <li>
+                            <button class="btn btn-success navbar-btn"  data-toggle="modal" data-target="#w_modal">Winner
+                            </button>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <div class="col-md-6">
-                <div class="row">
-                    <button class="btn btn-primary status col-md-6">Start</button>
-                    <h3 class="col-md-6 t_status"></h3>
-                    <a class="btn btn-primary logout" href="/logout">Logout</a>
-                    <button class="btn btn-success col-md-6"  data-toggle="modal" data-target="#w_modal">Winner
-                    </button>
+        </nav>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 panel">
+                    <h2 class="th_name text-success">Tournament Name: </h2>
+                </div>
+                <div class="col-md-6 panel">
+                    <h2 class="t_status text-success">Tournament Status: </h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 ">
+                    <div class="row well players">
+                        <div class="col-md-12 panel input-group">
+                            <input type="text" name="players" class="form-control p_input">
+                            <span class="input-group-btn">
+                                <button class="btn btn-info addPlayer" type="button">Add</button>
+                            </span>
+                        </div>
+
+                        <div class="players_body">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="well st_table">
+
+                    </div>
+                </div>
+            </div>
+            <div class="row r_table well">
+                <div class="col-md-12">
+                    <table class="table table-striped table-hover col-md-12 panel ">
+                        <thead class="bg-info">
+                            <th>Round#</th>
+                            <th>Status</th>
+                            <th>Result</th>
+                            <th>Play</th>
+                        </thead>
+                        <tbody class='r_details'>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-    </div>
-    </div>
-</nav>
-
-
-<div class="row">
-    <div class="col-md-6 players">
-        <div class="row">
-            <input type="text" name="players" class="col-md-6 p_input">
-            <button type="submit" class="btn btn-primary status col-md-4 addPlayer">Add Player</button>
-            <button type="submit" class="btn btn-primary status col-md-4 add_exist"  data-toggle="modal" data-target="#adde_modal">Add Existing Player</button>
-        </div>
-        <h3>Players</h3>
-        <div class="player_name">
-
-        </div>
-    </div>
-    <div class="col-md-6">
-        <table class="table table-striped table-inverse st_table">
-            <thead class="thead-inverse">
-                <tr>
-                    <th>Name</th>
-                    <th>Matches</th>
-                    <th>Wins</th>
-                    <th>Losses</th>
-                    <th>Round</th>
-                </tr>
-            </thead>
-            <tbody class="st_body">
-
-            </tbody>
-        </table>
-    </div>
-</div>
-
-<div class="row r_table">
-    <div class="col-md-12">
-        <table class="table table-striped table-inverse">
-            <thead>
-                <th>Round#</th>
-                <th>Status</th>
-                <th>Result</th>
-                <th>Play</th>
-            </thead>
-            <tbody class='r_details'>
-            </tbody>
-        </table>
-    </div>
-</div>
-{{>pairings}}
-{{>matchreport}}
-{{>winner}}
-{{>addExisting}}
-<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js">
-</script>
-<script type="text/javascript" src="/js/script.js"></script>
-<script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
-<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-</div>
-</body>
+        {{>pairings}}
+        {{>matchreport}}
+        {{>winner}}
+        {{>addExisting}}
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js">
+        </script>
+        <script type="text/javascript" src="/js/script.js"></script>
+        <script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
+        <script type="text/javascript"
+            src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
+        </script>
+    </body>
+</html>

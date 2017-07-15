@@ -34,14 +34,17 @@ module.exports = function(passport) {
 
                 var newUserMysql = new Object();
                 var email = req.body.email;
-                console.log(email);
                 newUserMysql.email    = email;
-                newUserMysql.password = password; // use the generateHash function in our user model
-                var insertQuery = "INSERT INTO user ( username,email, password ) values ('"+ username+"','"+ email +"','"+ password +"')";
+                newUserMysql.password = password;
+                console.log(email,"email");
+                console.log(username, "user");
+                console.log(password, "password");
+                var insertQuery = "INSERT INTO user ( username,password ) values ('"+ username+"','"+ password +"')";
                 connection.query(insertQuery,function(err,rows){
-                newUserMysql.id = rows.insertId;
-                req.session.passport.tournament = 2;
-                return done(null, newUserMysql);
+                    console.log(rows, 'rows');
+                    newUserMysql.id = rows.insertId;
+                    req.session.passport.tournament = 2;
+                    return done(null, newUserMysql);
                 });
             }
         });

@@ -10,9 +10,19 @@ module.exports = (app,passport) => {
         res.render('login.hbs');
     })
 
+    app.get('/signup', (req, res)=>{
+        res.render('signup.hbs');
+    })
+
     app.post('/login', passport.authenticate('local-login', {
         successRedirect : '/profile',
         failureRedirect : '/login',
+        failureFlash : true
+    }));
+
+    app.post('/signup', passport.authenticate('local-signup', {
+        successRedirect : '/login',
+        failureRedirect : '/signup',
         failureFlash : true
     }));
 

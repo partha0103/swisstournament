@@ -15,8 +15,7 @@ $(document).ready(function(){
             url: '/playersInTour',
             success:function(data){
                 r_table.hide();
-                var result = addNames(data);
-                $('.player_name').html(result);
+                $('.players_body').html(data);
             }
         })
     }
@@ -25,8 +24,7 @@ $(document).ready(function(){
         $.ajax({
             url: '/standings',
             success: function(standings){
-                var st_table = crtStandings(standings);
-                $('.st_body').html(st_table);
+                $('.st_table').html(standings);
             }
         })
     }
@@ -67,24 +65,21 @@ $(document).ready(function(){
         $.ajax({
             url:'/tournamentStatus',
             success: function(data){
-                $('.t_status').html(data[0].status);
+                $('.t_status').html("Tournament Status: "+data[0].status);
                 th_name.html("Tournament Name: "+ data[0].name);
                 var tour_status = data[0].status;
                 if(tour_status == "On progress"){
                     $(".addPlayer").attr('disabled', true);
-                    addPlayer.html("Add Player");
+                    addPlayer.html("Add");
                     $(".status").html("Resume");
                     $('.add_exist').html("Add Existing");
                     $(".add_exist").attr('disabled', true);
                 }
                 else if(tour_status == "Finished"){
-                    $(".status").html("Round Table");
-                    addPlayer.html("Add Player");
-                    $(".status").removeClass("btn btn-primary status col-md-6").addClass("btn btn-success winner col-md-6");
+                    $(".status").html("Finished");
+                    addPlayer.html("Add");
                     $(".addPlayer").attr('disabled', true);
-                    addPlayer.addClass("btn btn-primary col-md-6");
                     $('.add_exist').html("Add Existing");
-                    addPlayer.html("Add Player");
                     $(".add_exist").attr('disabled', true);
                 }
             }
@@ -148,20 +143,18 @@ $(document).ready(function(){
                     if(data.status[i]){
                         if(data.status[i].r_status == 'ended'){
                             $(`*[data-sid="`+i+`"]`).html(data.status[i].r_status);
-                            $(`*[data-pid="`+i+`"]`).attr('disabled', true);
                             $(`*[data-mrid="`+i+`"]`).attr('disabled', true);
+                            $(`*[data-rid="`+i+`"]`).prop('disabled', false);
                         }
                     }
                     else if(row > 0){
-                        $(`*[data-rid="`+i+`"]`).attr('disabled', true);
-                        $(`*[data-pid="`+i+`"]`).attr('disabled', true);
                         $(`*[data-mrid="`+i+`"]`).attr('disabled', true);
+                        $(`*[data-rid="`+i+`"]`).prop('disabled', true);
                         row = row + 1;
                     }
                     else if(row == 0){
-                        console.log("hello");
-                        row = row + 1;
                         $(`*[data-rid="`+i+`"]`).prop('disabled', true);
+                        row = row +1;
                     }
                 }
             }
@@ -189,8 +182,7 @@ $(document).ready(function(){
         $.ajax({
             url: '/pairings/'+ round,
             success: function(pairs){
-                var result = showReportMatch(pairs);
-                result  = result + "<input class='hide' type='hidden'value='"+round+"'>"
+                var result  = pairs + "<input class='hide' type='hidden'value='"+round+"'>"
                 $('.m_body').html(result);
             }
         })
@@ -249,22 +241,6 @@ $(document).ready(function(){
 
 })
 
-
-
-
-
-function crtStandings(standings){
-    var st_table = "";
-    for(var i=0; i<standings.length; i++){
-        st_table = st_table + `<tr><td>`+ standings[i].name +
-                    `</td><td>`+standings[i].no_matches+`</td><td>` +
-                    standings[i].wins+`</td><td>`+(standings[i].no_matches - standings[i].wins)+
-                    `</td><td>`+standings[i].no_matches+`</td></tr>`;
-    }
-    return st_table;
-}
-
-
 function crtRoundTable(n){
     var t_rows = "<tr>";
     for(let i=0; i<n;i++){
@@ -287,20 +263,6 @@ function showPairings(pairs){
                 + pair.p1_name+ `vs`+ pair.p2_name+`</h4>`
     });
     return result;
-}
-
-
-function showReportMatch(pairs){
-    var result = "<h1><h1>";
-    pairs.forEach(function(pair){
-        result  = result + `<h4> `+
-                pair.p1_name+ ` vs `+ pair.p2_name+` </h4> `+
-                `<select class='form-control winner_list' name='winner'>
-                    <option value='`+pair.p1_name+`'>`+pair.p1_name+`</option>
-                    <option value='`+pair.p2_name+`'>`+pair.p2_name+`</option>
-                </select>`
-    });
-    return result ;
 }
 
 
