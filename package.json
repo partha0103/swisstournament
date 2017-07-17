@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/jasmine"
   },
   "author": "",
   "license": "ISC",
@@ -17,14 +17,12 @@
     "mysql": "^2.13.0",
     "nodemon": "^1.11.0",
     "passport": "^0.3.2",
+    "request": "^2.81.0",
     "session": "^0.1.0",
     "session-file-store": "^1.0.0"
   },
   "devDependencies": {
+    "jasmine": "^2.6.0",
     "jasmine-node": "^1.14.5"
-  },
-
-  "scripts": {
-    "test": "./node_modules/.bin/jasmine-node --verbose spec/"
   }
 }
