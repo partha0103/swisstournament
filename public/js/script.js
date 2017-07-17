@@ -224,7 +224,7 @@ $(document).ready(function(){
         $.ajax({
             method: 'post',
             data: data,
-            url: '/registerPlayer',
+            url: '/registerExisting',
             success: function(result){
                 playerDetails();
                 standings();

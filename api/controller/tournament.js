@@ -44,6 +44,16 @@ exports.registerPlayer = (req, res)=>{
     })
 }
 
+exports.registerExisting = (req, res)=>{
+    var tournament_id = req.session.tournament_id;
+    var user_id = req.session.passport.user;
+    var name = req.body.name;
+    tournament.registerExisting(user_id, tournament_id,name,function(result){
+        console.log(result, "result of insertion");
+        res.json(result);
+    })
+}
+
 exports.standings = (req, res)=>{
     var tournament_id = req.session.tournament_id;
     tournament.currentStandings(tournament_id, function(result){

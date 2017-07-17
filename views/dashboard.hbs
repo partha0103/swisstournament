@@ -11,7 +11,7 @@
                 <div class="navbar-header">
                     <ul class="nav navbar-nav">
                         <li>
-                            <button type="button" class="btn btn-default navbar-btn">Home</button>
+                            <button type="button" class="btn btn-default navbar-btn"><a href="/profile">Home</a></button>
                         </li>
                         <li>
                             <button class="btn btn-primary status navbar-btn">Start</button>
@@ -20,10 +20,20 @@
                             <button class="btn btn-success navbar-btn"  data-toggle="modal" data-target="#w_modal">Winner
                             </button>
                         </li>
+                        <li>
+                            <button class="btn btn-info navbar-btn add_exist"  data-toggle="modal" data-target="#adde_modal">Add Existing
+                            </button>
+                        </li>
+                        <li>
+                            <button type="button" class="btn btn-default navbar-btn"><a href="/logout">Logout</a></button>
+                        </li>
                     </ul>
                 </div>
             </div>
         </nav>
+        <div class="row">
+            <div class="alert alert-warning"></div>
+        </div>
         <div class="container">
             <div class="row">
                 <div class="col-md-6 panel">

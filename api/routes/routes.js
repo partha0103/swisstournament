@@ -74,6 +74,9 @@ module.exports = (app,passport) => {
 
     app.route('/addExisting', isLoggedIn)
         .get(tournament.addExisting);
+
+    app.route('/registerExisting', isLoggedIn)
+        .post(tournament.registerExisting);
     app.get('/logout', function(req, res) {
         req.logout();
         res.redirect('/');
