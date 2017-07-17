@@ -234,52 +234,54 @@ $(document).ready(function(){
         })
     })
 
+    function crtRoundTable(n){
+        var t_rows = "<tr>";
+        for(let i=0; i<n;i++){
+            t_rows = t_rows + `<tr><td>`+(i+1)+
+            `</td><td class='r_status' data-sid='`+i+`'>`+ `Not started`+
+            `</td><td><button class='btn btn-primary r_result' data-toggle="modal" data-target="#p_modal"
+            data-rid="`+i+` ">Result</button></td><td><button class='r_report btn btn-primary' data-toggle="modal" data-target="#mr_modal" data-mrid="`+i+`"">Reportmatch</button></td>`
+        }
+        return t_rows
+    }
+
+    function isPowOf2(n){
+        return (Math.log2(n)) % 1 == 0;
+    }
+
+    function showPairings(pairs){
+        var result = ""
+        pairs.forEach(function(pair){
+            result = result + `<h4>`
+            + pair.p1_name+ `vs`+ pair.p2_name+`</h4>`
+        });
+        return result;
+    }
+
+
+    function winnerTable(results){
+        var result = `<h1>Result<H1>`
+        result = result + `<table class="table table-striped table-inverse">` +
+        `<thead>
+        <th>Player1</th>
+        <th>Player2</th>
+        <th>Winner</th>
+        </thead>
+        <tbody>`;
+        for(let i=0; i<results.length; i++){
+            result = result + `<tr>`+
+            `<td>`+results[i].player1_name+`</td>`+
+            `<td>`+results[i].player2_name+`</td>`+
+            `<td>`+results[i].winner_name+`</td>`+
+            `</tr>`
+        }
+        return result + '</h1>';
+    }
+
     tournamentStatus();
     playerDetails();
     standings();
 })
 
-function crtRoundTable(n){
-    var t_rows = "<tr>";
-    for(let i=0; i<n;i++){
-        t_rows = t_rows + `<tr><td>`+(i+1)+
-                `</td><td class='r_status' data-sid='`+i+`'>`+ `Not started`+
-                `</td><td><button class='btn btn-primary r_result' data-toggle="modal" data-target="#p_modal"
-                 data-rid="`+i+` ">Result</button></td><td><button class='r_report btn btn-primary' data-toggle="modal" data-target="#mr_modal" data-mrid="`+i+`"">Reportmatch</button></td>`
-    }
-    return t_rows
-}
 
-function isPowOf2(n){
-    return (Math.log2(n)) % 1 == 0;
-}
-
-function showPairings(pairs){
-    var result = ""
-    pairs.forEach(function(pair){
-        result = result + `<h4>`
-                + pair.p1_name+ `vs`+ pair.p2_name+`</h4>`
-    });
-    return result;
-}
-
-
-function winnerTable(results){
-    var result = `<h1>Result<H1>`
-    result = result + `<table class="table table-striped table-inverse">` +
-                            `<thead>
-                                <th>Player1</th>
-                                <th>Player2</th>
-                                <th>Winner</th>
-                            </thead>
-                            <tbody>`;
-    for(let i=0; i<results.length; i++){
-        result = result + `<tr>`+
-                            `<td>`+results[i].player1_name+`</td>`+
-                            `<td>`+results[i].player2_name+`</td>`+
-                            `<td>`+results[i].winner_name+`</td>`+
-                        `</tr>`
-    }
-    return result + '</h1>';
-}
 

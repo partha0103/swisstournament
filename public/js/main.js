@@ -15,13 +15,14 @@ $(document).ready(function(){
             }
         })
     });
+
+    function showPlayers(data){
+        var div ="<div><input type='text' class='p_input' name='name'><button type='submit' class='p_insert'></button>"
+        for(let i=0; i<data.length;i++){
+            div = div + "<a class='player'>"+data[i].name+"</a>";
+        }
+        return div+"</div>"
+}
 })
 
-function showPlayers(data){
-    var div ="<div><input type='text' class='p_input' name='name'><button type='submit' class='p_insert'></button>"
-    for(let i=0; i<data.length;i++){
-        div = div + "<a class='player'>"+data[i].name+"</a>";
-    }
-    return div+"</div>"
-}
 
