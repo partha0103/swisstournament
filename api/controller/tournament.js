@@ -2,7 +2,7 @@ var tournament = require('./../../lib/tournament.js');
 
 
 exports.countPlayers = (req, res)=>{
-    var tournament_id = req.session.passport.tournament_id;
+    var tournament_id = req.session.tournament_id;
     tournament.countPlayers(tournament_id, function(count){
         res.json(count);
     })
