@@ -6,8 +6,9 @@ $(document).ready(function(){
     var r_details = $('.r_details');
     var status = $('.status');
     function playerDetails() {
+        var id = $('.tournament_id').val();
         $.ajax({
-            url: '/playersInTour',
+            url: '/playersInTour/' + id,
             success:function(data){
                 $('.players_body').html(data);
             }
@@ -16,7 +17,7 @@ $(document).ready(function(){
 
     function standings(){
         $.ajax({
-            url: '/standings',
+            url: '/standings/' + $('.tournament_id').val(),
             success: function(standings){
                 $('.st_table').html(standings);
             }
@@ -27,7 +28,8 @@ $(document).ready(function(){
         var data = {
             name: [],
             round: $('.hide').val(),
-            status: "ended"
+            status: "ended",
+            tournament_id: $('.tournament_id').val()
         };
         console.log($('.hide').val());
         $.each($('select.winner_list'), function(){
@@ -50,7 +52,7 @@ $(document).ready(function(){
 
     function updateTstatus(){
         $.ajax({
-            url:'/updateTstatus',
+            url:'/updateTstatus/' + $('.tournament_id').val(),
             success: function(data){
                 tournamentStatus();
             }
@@ -59,7 +61,7 @@ $(document).ready(function(){
 
     function tournamentStatus(){
         $.ajax({
-            url:'/tournamentStatus',
+            url:'/tournamentStatus/'+ $('.tournament_id').val(),
             success: function(data){
                 $('.t_status').html("Tournament Status: "+data[0].status);
                 th_name.html("Tournament Name: "+ data[0].name);
@@ -91,7 +93,7 @@ $(document).ready(function(){
 
     function countPlayers(){
         $.ajax({
-            url: '/count',
+            url: '/count/' + $('.tournament_id').val(),
             success: function(data){
                 var no_players = data;
                 if(isPowOf2(no_players)){
@@ -121,7 +123,8 @@ $(document).ready(function(){
         var name = $('.p_input').val();
         $('.p_input').val("");
         var data = {
-            'name': name
+            'name': name,
+            'tournament_id': $('.tournament_id').val()
         }
         $.ajax({
             type: "POST",
@@ -146,7 +149,7 @@ $(document).ready(function(){
 
     function roundStatus(){
         $.ajax({
-            url: '/roundstatus',
+            url: '/roundstatus/'+ $('.tournament_id').val(),
             success:function(data){
                 var row = 0;
                 for(let i=0; i<data.count;i++){
@@ -172,25 +175,12 @@ $(document).ready(function(){
 
     }
 
-    $("#r_modal").on('show.bs.modal', function(event){
-        var a = event.relatedTarget;
-        var round = Number($(a).attr('data-pid'))+ 1;
-        event.stopPropagation();
-        $.ajax({
-            url: '/pairings/'+ round,
-            success: function(pairs){
-                var result = showPairings(pairs);
-                $('.modal-body').html(result);
-            }
-        })
-    });
-
     $("#mr_modal").on('show.bs.modal', function(event){
         var a = event.relatedTarget;
         var round = Number($(a).attr('data-rmid'));
         event.stopPropagation();
         $.ajax({
-            url: '/pairings/'+ round,
+            url: '/pairings/'+ round + "/" + $('.tournament_id').val(),
             success: function(pairs){
                 var result  = pairs + "<input class='hide' type='hidden'value='"+round+"'>"
                 $('.m_body').html(result);
@@ -203,7 +193,7 @@ $(document).ready(function(){
         var round = Number($(a).attr('data-rid'));
         event.stopPropagation();
         $.ajax({
-            url: '/getroundResult/'+ round,
+            url: '/getroundResult/'+ round + "/" + $('.tournament_id').val(),
             success: function(results){
                 var result = winnerTable(results);
                 $('.p_body').html(result);
@@ -213,7 +203,7 @@ $(document).ready(function(){
     $("#adde_modal").on('show.bs.modal', function(event){
         event.stopPropagation();
         $.ajax({
-            url: '/addExisting',
+            url: '/addExisting/' + $('.tournament_id').val(),
             success: function(list){
                 $('.add_existing').html(list);
             }
@@ -222,7 +212,8 @@ $(document).ready(function(){
 
     $(".add_e").on('click', function(){
         var data = {
-            name: ""
+            name: "",
+            id: $('.tournament_id').val()
         }
         data.name = $('input[name=add_ex]:checked', '#e_form').val();
         $.ajax({
@@ -284,7 +275,7 @@ $(document).ready(function(){
 
     function winner(){
         $.ajax({
-            url: '/winner',
+            url: '/winner/' + $('.tournament_id').val(),
             success: function(winner){
                 $('.winner_display').html('Winner: ' + winner);
             }

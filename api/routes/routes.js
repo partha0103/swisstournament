@@ -60,45 +60,46 @@ module.exports = (app,passport) => {
 
     app.get('/tDetails/:id', isLoggedIn, (req, res)=>{
         req.session.tournament_id = req.params.id;
-        res.render('dashboard.hbs');
+        var tournament_id = req.params.id;
+        res.render('dashboard.hbs',{
+            'tournament_id': tournament_id
+        });
     })
 
-    app.route('/playersInTour', isLoggedIn)
-        .get(tournament.playersInTour)
-
-    app.route('/allPlayers', isLoggedIn)
+    app.route('/playersInTour/:id', isLoggedIn)
         .get(tournament.playersInTour)
 
     app.route('/registerPlayer', isLoggedIn)
         .post(tournament.registerPlayer);
-    app.route('/standings', isLoggedIn)
+
+    app.route('/standings/:id', isLoggedIn)
         .get(tournament.standings);
 
-    app.route('/tournamentStatus', isLoggedIn)
+    app.route('/tournamentStatus/:id', isLoggedIn)
         .get(tournament.tournamentStatus);
 
-    app.route('/count', isLoggedIn)
+    app.route('/count/:id', isLoggedIn)
         .get(tournament.countPlayers);
 
-    app.route('/pairings/:round', isLoggedIn)
+    app.route('/pairings/:round/:id', isLoggedIn)
         .get(tournament.pairings);
 
     app.route('/executeRound', isLoggedIn)
         .post(tournament.executeRound);
 
-    app.route('/roundstatus', isLoggedIn)
+    app.route('/roundstatus/:id', isLoggedIn)
         .get(tournament.roundstatus)
 
-    app.route('/updateTstatus', isLoggedIn)
+    app.route('/updateTstatus/:id', isLoggedIn)
         .get(tournament.updateTstatus)
 
-    app.route('/getroundResult/:round', isLoggedIn)
+    app.route('/getroundResult/:round/:id', isLoggedIn)
         .get(tournament.getroundResult)
 
-    app.route('/winner', isLoggedIn)
+    app.route('/winner/:id', isLoggedIn)
         .get(tournament.winner)
 
-    app.route('/addExisting', isLoggedIn)
+    app.route('/addExisting/:id', isLoggedIn)
         .get(tournament.addExisting);
 
     app.route('/registerExisting', isLoggedIn)
