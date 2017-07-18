@@ -26,6 +26,19 @@ module.exports = (app,passport) => {
         failureFlash : true
     }));
 
+    app.get('/auth/google', passport.authenticate('google',
+    {
+        scope : 'email'
+    }
+    ));
+
+    app.get('/auth/google/callback',
+        passport.authenticate('google', {
+            successRedirect : '/profile',
+            failureRedirect : '/'
+        }
+     ));
+
     app.get('/auth/facebook', passport.authenticate('facebook',
     {
         scope : 'email'

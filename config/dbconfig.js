@@ -3,7 +3,7 @@ module.exports = {
         'host': 'localhost',
         'user': 'root',
         'password': 'mountblue',
-        'database': 'swiss_tournament'
+        'database': 'tournament'
     },
     'users_table': 'user'
 };

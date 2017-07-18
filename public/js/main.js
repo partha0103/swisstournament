@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    var table = $('table')
+    var table = $('.tour_table')
     $('.tournament').on('click',function(event){
         var val = $(".in_tour").val();
         $(".in_tour").val("");
@@ -22,7 +22,7 @@ $(document).ready(function(){
             div = div + "<a class='player'>"+data[i].name+"</a>";
         }
         return div+"</div>"
-}
+    }
 })
 
 

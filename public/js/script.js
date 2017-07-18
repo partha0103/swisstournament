@@ -9,7 +9,6 @@ $(document).ready(function(){
         $.ajax({
             url: '/playersInTour',
             success:function(data){
-                r_table.hide();
                 $('.players_body').html(data);
             }
         })
@@ -30,6 +29,7 @@ $(document).ready(function(){
             round: $('.hide').val(),
             status: "ended"
         };
+        console.log($('.hide').val());
         $.each($('select.winner_list'), function(){
             data.name.push($(this).val());
         });
@@ -37,11 +37,13 @@ $(document).ready(function(){
             url: '/executeRound',
             method: "post",
             data: data,
-            success:function(){
-                $('#mr_modal').modal('hide')
+            success:function(result){
+                $('#mr_modal').modal('hide');
                 standings();
                 countPlayers();
                 updateTstatus();
+                console.log(data);
+                $.notify("Successfully played round: " + data.round, "info");
             }
         })
     })
@@ -51,7 +53,6 @@ $(document).ready(function(){
             url:'/updateTstatus',
             success: function(data){
                 tournamentStatus();
-                console.log(data);
             }
         })
     }
@@ -64,6 +65,8 @@ $(document).ready(function(){
                 th_name.html("Tournament Name: "+ data[0].name);
                 var tour_status = data[0].status;
                 if(tour_status == "On progress"){
+                    countPlayers();
+                    winner();
                     $(".addPlayer").attr('disabled', true);
                     addPlayer.html("Add");
                     $(".status").html("Resume");
@@ -71,11 +74,16 @@ $(document).ready(function(){
                     $(".add_exist").attr('disabled', true);
                 }
                 else if(tour_status == "Finished"){
+                    countPlayers();
+                    winner();
                     $(".status").html("Finished");
                     addPlayer.html("Add");
                     $(".addPlayer").attr('disabled', true);
                     $('.add_exist').html("Add Existing");
                     $(".add_exist").attr('disabled', true);
+                }
+                else if(tour_status == "Yet to start"){
+                    r_table.hide();
                 }
             }
         })
@@ -94,6 +102,7 @@ $(document).ready(function(){
                     roundStatus();
                 }
                 else{
+                    $.notify("No of players is not power of 2","warn");
                 }
             }
         })
@@ -119,8 +128,14 @@ $(document).ready(function(){
             data: data,
             url: '/registerPlayer',
             success: function(data){
-                playerDetails();
-                standings();
+                if(data.flag){
+                    playerDetails();
+                    standings();
+                    $.notify(data.message, "success");
+                }
+                else{
+                    $.notify(data.message, "error");
+                }
             }
         })
     });
@@ -195,17 +210,6 @@ $(document).ready(function(){
             }
         })
     });
-
-    $("#w_modal").on('show.bs.modal', function(event){
-        event.stopPropagation();
-        $.ajax({
-            url: '/winner',
-            success: function(winner){
-                $('.w_header').html(winner);
-            }
-        })
-    });
-
     $("#adde_modal").on('show.bs.modal', function(event){
         event.stopPropagation();
         $.ajax({
@@ -278,9 +282,19 @@ $(document).ready(function(){
         return result + '</h1>';
     }
 
+    function winner(){
+        $.ajax({
+            url: '/winner',
+            success: function(winner){
+                $('.winner_display').html('Winner: ' + winner);
+            }
+        })
+    }
+
     tournamentStatus();
     playerDetails();
     standings();
+    winner();
 })
 
 

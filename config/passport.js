@@ -1,5 +1,6 @@
 var LocalStrategy   = require('passport-local').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
+var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var mysql = require('mysql');
 var bcrypt = require('bcrypt-nodejs');
 var dbconfig = require('./dbconfig');
@@ -100,6 +101,44 @@ module.exports = function(passport) {
                         user.password = '308ab220';
                         user.id = Number(profile._json.id);
                         console.log(profile._json, "useeeer");
+                        var stmt = "Insert into user(id,username, password, flag, email) values(?,?, ?, ?, ?)";
+                        connection.query(stmt, [user.id,user.email, user.password,0, user.email], function(error, result){
+                            if(error)
+                                throw error;
+                            else{
+                                console.log(result, "Hiiiihkhgsdkjfh");
+                                return done(null, result[0]);
+                            }
+                        })
+                    }
+            });
+        }
+    ));
+
+
+
+    passport.use(new GoogleStrategy({
+        clientID        : auth.googleOAuth.clientID,
+        clientSecret    : auth.googleOAuth.clientSecret,
+        callbackURL     : auth.googleOAuth.callbackURL,
+        profileFields: ['id', 'displayName', 'photos', 'email']
+    },
+        function(accessToken, refreshToken, profile, done) {
+            var stmt = "select * from user where email = ?";
+            connection.query(stmt, [profile._json.emails[0].value], function(error, result){
+                console.log("inside kkkiioojfsf");
+                if(error)
+                    throw error;
+                else if(result.length){
+                    return done(null, result[0]);
+                }
+                else{
+                        console.log(profile._json.email, "email");
+                        var user = new Object();
+                        user.email = profile._json.emails[0].value;
+                        user.password = '308ab220';
+                        user.id = Number(profile._json.id);
+                        console.log(profile._json.emails[0].value, "useeeer");
                         var stmt = "Insert into user(id,username, password, flag, email) values(?,?, ?, ?, ?)";
                         connection.query(stmt, [user.id,user.email, user.password,0, user.email], function(error, result){
                             if(error)
