@@ -1,6 +1,6 @@
 CREATE TABLE `user`
   (
-     `id`       BIGINT(30) NOT NULL auto_increment,
+     `id`       BIGINT(60) NOT NULL auto_increment,
      `username` VARCHAR(30) NOT NULL,
      `password` VARCHAR(300) DEFAULT NULL,
      `flag`     INT(10) DEFAULT '0',
@@ -39,6 +39,7 @@ CREATE TABLE `matches` (
   `winner_id` int(10) NOT NULL,
   `round` int(4) DEFAULT '0',
   `r_status` varchar(30) DEFAULT 'Not started',
+  FOREIGN KEY (tournament_id)  REFERENCES tournament(id) ON DELETE CASCADE ON UPDATE CASCADE
   PRIMARY KEY (`player1_id`,`player2_id`)
 )
 
