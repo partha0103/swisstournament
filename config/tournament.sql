@@ -1,6 +1,6 @@
 CREATE TABLE `user`
   (
-     `id`       INT(10) NOT NULL auto_increment,
+     `id`       BIGINT(30) NOT NULL auto_increment,
      `username` VARCHAR(30) NOT NULL,
      `password` VARCHAR(300) DEFAULT NULL,
      `flag`     INT(10) DEFAULT '0',
@@ -17,9 +17,7 @@ CREATE TABLE `tournaments` (
       `status`  varchar(30) DEFAULT 'Yet to start',
       `winner`  varchar(30) DEFAULT 'Tournament yet to be finished',
       PRIMARY KEY (`id`),
-      UNIQUE KEY `NAME` (`NAME`),
-      KEY `user_id` (`user_id`),
-      CONSTRAINT `tournaments_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `USER` (`id`)
+      UNIQUE KEY `NAME` (`NAME`))
 
 
 
@@ -31,9 +29,6 @@ CREATE TABLE `players` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`),
   KEY `user_id` (`user_id`),
-  KEY `FK_tournament_id` (`tournament_id`),
-  CONSTRAINT `FK_tournament_id` FOREIGN KEY (`tournament_id`) REFERENCES `tournaments` (`id`),
-  CONSTRAINT `players_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 )
 
 
