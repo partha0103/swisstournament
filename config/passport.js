@@ -1,7 +1,9 @@
 var LocalStrategy   = require('passport-local').Strategy;
+var FacebookStrategy = require('passport-facebook').Strategy;
 var mysql = require('mysql');
 var bcrypt = require('bcrypt-nodejs');
 var dbconfig = require('./dbconfig');
+var auth = require('./auth');
 var connection = mysql.createConnection(dbconfig.connection);
 var bodyParser   = require('body-parser');
 // expose this function to our app using module.exports
@@ -27,7 +29,7 @@ module.exports = function(passport) {
         connection.query(" select * from user where username = '"+username+"' ",function(err,rows){
             if (err)
                 return done(err);
-             if (rows.length) {
+            if (rows.length) {
                 return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
             } else {
 
@@ -57,10 +59,10 @@ module.exports = function(passport) {
     },
     function(req, username, password, done) { // callback with email and password from our form
 
-         connection.query("SELECT * FROM `user` WHERE `username` = '" + username + "'",function(err,rows){
-            if (err)
-                return done(err);
-             if (!rows.length) {
+     connection.query("SELECT * FROM `user` WHERE `username` = '" + username + "'",function(err,rows){
+        if (err)
+            return done(err);
+        if (!rows.length) {
                 return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
             }
 
@@ -73,6 +75,42 @@ module.exports = function(passport) {
             return done(null, rows[0]);
 
         });
-    }));
+ }));
 
-};
+    passport.use(new FacebookStrategy({
+        clientID        : auth.facebookAuth.clientID,
+        clientSecret    : auth.facebookAuth.clientSecret,
+        callbackURL     : auth.facebookAuth.callbackURL,
+        profileFields: ['id', 'displayName', 'photos', 'email']
+    },
+        function(accessToken, refreshToken, profile, done) {
+            console.log("inside facebook auth", profile._json.email);
+            var stmt = "select * from user where email = ?";
+            connection.query(stmt, [profile._json.email], function(error, result){
+                console.log("inside kkkiioojfsf");
+                if(error)
+                    throw error;
+                else if(result.length){
+                    return done(null, result[0]);
+                }
+                else{
+                        console.log(profile._json.email, "email");
+                        var user = new Object();
+                        user.email = profile._json.email;
+                        user.password = '308ab220';
+                        user.id = Number(profile._json.id);
+                        console.log(profile._json, "useeeer");
+                        var stmt = "Insert into user(id,username, password, flag, email) values(?,?, ?, ?, ?)";
+                        connection.query(stmt, [user.id,user.email, user.password,0, user.email], function(error, result){
+                            if(error)
+                                throw error;
+                            else{
+                                console.log(result, "Hiiiihkhgsdkjfh");
+                                return done(null, result[0]);
+                            }
+                        })
+                    }
+            });
+        }
+    ));
+}
