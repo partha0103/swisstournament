@@ -17,10 +17,6 @@
                             <button class="btn btn-primary status navbar-btn">Start</button>
                         </li>
                         <li>
-                            <button class="btn btn-info navbar-btn add_exist"  data-toggle="modal" data-target="#adde_modal">Add Existing
-                            </button>
-                        </li>
-                        <li>
                             <button type="button" class="btn btn-default navbar-btn"><a href="/logout">Logout</a></button>
                         </li>
                     </ul>
@@ -31,15 +27,15 @@
         <input type="text" name="tournament_id" hidden class="tournament_id"
             value="{{tournament_id}}">
             <div class="row">
-                <div class="col-md-6 panel">
-                    <h2 class="th_name text-success">Tournament Name: </h2>
+                <div class="col-md-4 panel">
+                    <h2 class="th_name text-success">Name: </h2>
                 </div>
-                <div class="col-md-6 panel">
-                    <h2 class="t_status text-success">Tournament Status: </h2>
+                <div class="col-md-4 panel">
+                    <h2 class="t_status text-success ">Status: </h2>
                 </div>
-            </div>
-            <div class="row">
-                <h2 class="col-md-12 text-success winner_display text-center">Winner:</h2>
+                <div class="col-md-4 panel">
+                    <h2 class="text-success winner_display text-center">Winner:</h2>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-6 ">
@@ -48,6 +44,11 @@
                             <input type="text" name="players" class="form-control p_input">
                             <span class="input-group-btn">
                                 <button class="btn btn-info addPlayer" type="button">Add</button>
+                            </span>
+                            <span class="input-group-btn">
+                                <button class="btn btn-info
+                                add_exist"  data-toggle="modal" data-target="#adde_modal">Add Existing
+                                </button>
                             </span>
                         </div>
 

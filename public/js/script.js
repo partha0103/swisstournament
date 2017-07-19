@@ -63,8 +63,8 @@ $(document).ready(function(){
         $.ajax({
             url:'/tournamentStatus/'+ $('.tournament_id').val(),
             success: function(data){
-                $('.t_status').html("Tournament Status: "+data[0].status);
-                th_name.html("Tournament Name: "+ data[0].name);
+                $('.t_status').html("Status: "+data[0].status);
+                th_name.html("Name: "+ data[0].name);
                 var tour_status = data[0].status;
                 if(tour_status == "On progress"){
                     countPlayers();
@@ -119,26 +119,31 @@ $(document).ready(function(){
 
     addPlayer.on('click', function(){
         var name = $('.p_input').val();
-        $('.p_input').val("");
-        var data = {
-            'name': name,
-            'tournament_id': $('.tournament_id').val()
+        if(name === ""){
+            $.notify("Player name can't be empty","error");
         }
-        $.ajax({
-            type: "POST",
-            data: data,
-            url: '/registerPlayer',
-            success: function(data){
-                if(data.flag){
-                    playerDetails();
-                    standings();
-                    $.notify(data.message, "success");
-                }
-                else{
-                    $.notify(data.message, "error");
-                }
+        else{
+            $('.p_input').val("");
+            var data = {
+                'name': name,
+                'tournament_id': $('.tournament_id').val()
             }
-        })
+            $.ajax({
+                type: "POST",
+                data: data,
+                url: '/registerPlayer',
+                success: function(data){
+                    if(data.flag){
+                        playerDetails();
+                        standings();
+                        $.notify(data.message, "success");
+                    }
+                    else{
+                        $.notify(data.message, "error");
+                    }
+                }
+            })
+        }
     });
 
     status.on('click', function(){
@@ -221,6 +226,7 @@ $(document).ready(function(){
             data: data,
             url: '/registerExisting',
             success: function(result){
+                $.notify("Successfully added to the player list", "success");
                 row.remove();
                 playerDetails();
                 standings();

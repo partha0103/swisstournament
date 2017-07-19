@@ -2,18 +2,24 @@ $(document).ready(function(){
     var table = $('.tour_table')
     $('.tournament').on('click',function(event){
         var val = $(".in_tour").val();
-        $(".in_tour").val("");
-        var data = {
-            name: val
+        if(val === ""){
+            $.notify("Tournament name can't be empty", "error");
         }
-        $.ajax({
-            method: 'POST',
-            url: '/crtTournament',
-            data: data,
-            success: function(data){
-                $('tbody').append("<tr><td><a class='tour' href='/tdetails/"+data.insertId+"'>"+val+"</a></td><td>Tournament yet to be finished</td><td>Yet to be declared</td></tr>")
+        else{
+            $(".in_tour").val("");
+            var data = {
+                name: val
             }
-        })
+            $.ajax({
+                method: 'POST',
+                url: '/crtTournament',
+                data: data,
+                success: function(data){
+                    $.notify("Successfully added the tournament", "success");
+                    $('tbody').append("<tr><td><a class='tour' href='/tdetails/"+data.insertId+"'>"+val+"</a></td><td>Tournament yet to be finished</td><td>Yet to be declared</td></tr>")
+                }
+            })
+        }
     });
 
     function showPlayers(data){
