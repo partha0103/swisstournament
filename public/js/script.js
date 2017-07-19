@@ -71,14 +71,12 @@ $(document).ready(function(){
                     winner();
                     $(".addPlayer").attr('disabled', true);
                     addPlayer.html("Add");
-                    $(".status").html("Resume");
                     $('.add_exist').html("Add Existing");
                     $(".add_exist").attr('disabled', true);
                 }
                 else if(tour_status == "Finished"){
                     countPlayers();
                     winner();
-                    $(".status").html("Finished");
                     addPlayer.html("Add");
                     $(".addPlayer").attr('disabled', true);
                     $('.add_exist').html("Add Existing");
@@ -210,21 +208,22 @@ $(document).ready(function(){
         })
     });
 
-    $(".add_e").on('click', function(){
+    $('.add_existing').delegate('.add_e', "click", function(event){
         var data = {
             name: "",
             id: $('.tournament_id').val()
         }
-        data.name = $('input[name=add_ex]:checked', '#e_form').val();
+        console.log();
+        var row = $(this).parent();
+        data.name = row.children('.exist_player').html();
         $.ajax({
             method: 'post',
             data: data,
             url: '/registerExisting',
             success: function(result){
+                row.remove();
                 playerDetails();
                 standings();
-                $('.add_existing').html();
-                $('#adde_modal').modal('hide');
             }
         })
     })

@@ -1,12 +1,11 @@
 <div>
-    <form id="e_form">
     {{#each players}}
-    <div class="radio">
-        <label>
-        <input type="radio" name="add_ex" id="radio_buttons" value="{{name}}">
-        {{name}}
-        </label>
-    </div>
+        <div class="row">
+            <div class="col-md-2"></div>
+            <h4 class="col-md-4 exist_player text-success">{{name}}</h4>
+            <div class="col-md-2"></div>
+            <button class="col-md-2 add_e btn btn-info">Add</button>
+            <div class="col-md-2"></div>
+        </div>
     {{/each}}
-    </form>
 </div>
