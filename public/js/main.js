@@ -16,16 +16,20 @@ $(document).ready(function(){
                 data: data,
                 success: function(data){
                     $.notify("Successfully added the tournament", "success");
-                    $('tbody').append("<tr><td><a class='tour' href='/tdetails/"+data.insertId+"'>"+val+"</a></td><td>Tournament yet to be finished</td><td>Yet to be declared</td></tr>")
+                    $('tbody').append("<tr><td><a class='tour' href='/tdetails/"+data.insertId+"'>"+val+"</a></td><td>Yet to start</td><td>Not declared</td></tr>")
+                },
+                error: function(error){
+                    $.notify("Unable to create tournament","error");
                 }
             })
         }
     });
 
+
     function showPlayers(data){
         var div ="<div><input type='text' class='p_input' name='name'><button type='submit' class='p_insert'></button>"
         for(let i=0; i<data.length;i++){
-            div = div + "<a class='player'>"+data[i].name+"</a>";
+            div = div + "<a class='player'>{{data[i].name}}</a>";
         }
         return div+"</div>"
     }

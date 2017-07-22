@@ -14,11 +14,29 @@ module.exports = (app,passport) => {
         res.render('signup.hbs');
     })
 
-    app.post('/login', passport.authenticate('local-login', {
-        successRedirect : '/profile',
-        failureRedirect : '/login',
-        failureFlash : true
-    }));
+    app.post('/login', function(req, res, next) {
+        passport.authenticate('local-login', { failureFlash : true }, function(err, user, info) {
+            if (err) {
+                 res.status(500).send(JSON.stringify({
+                    'msg': "Internal Server Error"
+                }));
+            }
+            if (!user) {
+                return res.render('login.hbs', { message: req.flash('loginMessage') });
+            }
+            req.login(user, function(err) {
+                if (err) return next(err);
+                req.session.save(function(err) {
+                    if (!err) {
+                        return res.redirect('/profile');
+                    }
+                    else {
+                        console.log('error occured during session save');
+                    }
+                });
+            });
+        })(req, res, next);
+    });
 
     app.post('/signup', passport.authenticate('local-signup', {
         successRedirect : '/login',
@@ -32,12 +50,29 @@ module.exports = (app,passport) => {
     }
     ));
 
-    app.get('/auth/google/callback',
-        passport.authenticate('google', {
-            successRedirect : '/profile',
-            failureRedirect : '/'
-        }
-     ));
+    app.get('/auth/google/callback', function(req, res, next) {
+        passport.authenticate('google', function(err, user, info) {
+            if (err) {
+                 res.status(500).send(JSON.stringify({
+                    'msg': "Internal Server Error"
+                }));
+            }
+            if (!user) {
+                return res.redirect('/');
+            }
+            req.login(user, function(err) {
+                if (err) return next(err);
+                req.session.save(function(err) {
+                    if (!err) {
+                        res.redirect('/profile');
+                    }
+                    else {
+                        console.log('error occured during session save');
+                    }
+                });
+            });
+        })(req, res, next);
+    });
 
     app.get('/auth/facebook', passport.authenticate('facebook',
     {
@@ -45,12 +80,29 @@ module.exports = (app,passport) => {
     }
     ));
 
-    app.get('/auth/facebook/callback',
-        passport.authenticate('facebook', {
-            successRedirect : '/profile',
-            failureRedirect : '/'
-        }
-     ));
+    app.get('/auth/facebook/callback', function(req, res, next) {
+        passport.authenticate('facebook', function(err, user, info) {
+            if (err) {
+                 res.status(500).send(JSON.stringify({
+                    'msg': "Internal Server Error"
+                }));
+            }
+            if (!user) {
+                return res.redirect('/');
+            }
+            req.login(user, function(err) {
+                if (err) return next(err);
+                req.session.save(function(err) {
+                    if (!err) {
+                        res.redirect('/profile');
+                    }
+                    else {
+                        console.log('error occured during session save');
+                    }
+                });
+            });
+        })(req, res, next);
+    });
 
     app.route('/profile', isLoggedIn)
         .get(tournament.getTournaments);
@@ -59,7 +111,6 @@ module.exports = (app,passport) => {
         .post(tournament.createTournament);
 
     app.get('/tDetails/:id', isLoggedIn, (req, res)=>{
-        req.session.tournament_id = req.params.id;
         var tournament_id = req.params.id;
         res.render('dashboard.hbs',{
             'tournament_id': tournament_id

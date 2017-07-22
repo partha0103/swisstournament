@@ -11,6 +11,9 @@ $(document).ready(function(){
             url: '/playersInTour/' + id,
             success:function(data){
                 $('.players_body').html(data);
+            },
+            error: function(error){
+                $.notify("Unable to fetch players detail of tournament","error");
             }
         })
     }
@@ -20,6 +23,9 @@ $(document).ready(function(){
             url: '/standings/' + $('.tournament_id').val(),
             success: function(standings){
                 $('.st_table').html(standings);
+            },
+            error: function(error){
+                $.notify("Unable to fetch standing details","error");
             }
         })
     }
@@ -69,18 +75,14 @@ $(document).ready(function(){
                 if(tour_status == "On progress"){
                     countPlayers();
                     winner();
-                    $(".addPlayer").attr('disabled', true);
-                    addPlayer.html("Add");
-                    $('.add_exist').html("Add Existing");
-                    $(".add_exist").attr('disabled', true);
+                    $('.input-group').remove();
+                    $(".status").remove();
                 }
                 else if(tour_status == "Finished"){
                     countPlayers();
                     winner();
-                    addPlayer.html("Add");
-                    $(".addPlayer").attr('disabled', true);
-                    $('.add_exist').html("Add Existing");
-                    $(".add_exist").attr('disabled', true);
+                    $('.input-group').remove();
+                    $(".status").remove();
                 }
                 else if(tour_status == "Yet to start"){
                     r_table.hide();
