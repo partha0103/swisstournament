@@ -40,7 +40,7 @@ module.exports = function(passport) {
                 var insertQuery = "INSERT INTO user ( username,password,email) values (?,?,?)";
                 connection.query(insertQuery,[username, password, email],function(err,rows){
                     newUserMysql.id = rows.insertId;
-                    return done(null, newUserMysql);
+                    return done(null, newUserMysql, req.flash('loginMessage',"Successfully registered"));
                 });
             }
         });
@@ -62,8 +62,9 @@ module.exports = function(passport) {
             }
 
             // if the user is found but the password is wrong
-            if (!( rows[0].password == password))
+            if (!( rows[0].password == password)){
                 return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
+            }
 
             // all is well, return successful user
             req.body.user = rows[0].id;

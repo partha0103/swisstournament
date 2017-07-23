@@ -1,27 +1,4 @@
-<!DOCTYPE html>
-    <html>
-        <head>
-            <title>Tournament Page</title>
-            <link rel="stylesheet" type="text/css"
-                href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        </head>
-        <body>
-        <nav class="navbar navbar-default navbar-inverse">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <ul class="nav navbar-nav">
-                        <li>
-                            <button type="button" class="btn btn-default navbar-btn"><a href="/profile">Home</a></button>
-                        </li>
-                        <li>
-                        </li>
-                        <li>
-                            <button type="button" class="btn btn-default navbar-btn"><a href="/logout">Logout</a></button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+{{>header}}
         <div class="container">
         <input type="text" name="tournament_id" hidden class="tournament_id"
             value="{{tournament_id}}">
@@ -56,7 +33,7 @@
                         </div>
                         <div class="col-md-12">
                             <div class="col-md-4"></div>
-                            <button class="btn btn-sucess status col-md-4">Start</button>
+                            <button class="btn btn-info status col-md-4">Start</button>
                             <div class="col-md-4"></div>
                         </div>
                     </div>
